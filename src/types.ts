@@ -58,7 +58,31 @@ export enum AppStatus {
 export interface User {
   id: string;
   email: string;
+  password?: string;
   fullName: string;
+  phone?: string;
   avatar?: string;
   createdAt: number;
+}
+
+// Dashboard specific types
+export interface UserData {
+  id: number;
+  fullName: string;
+  email: string;
+  avatar?: string;
+}
+
+export interface EnvData {
+  name: string;
+  temp: number;
+  aqi: number;
+  humidity: number;
+  pollen: number;
+  status: 'Normal' | 'Warning' | 'High';
+}
+
+export interface ChatMessage {
+  role: 'user' | 'bot';
+  text: string;
 }

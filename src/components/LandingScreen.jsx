@@ -1,181 +1,349 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
+// Rwanda districts & AQI
+const rwandaDistricts = [
+  { name: "Kigali", lat: -1.9441, lng: 30.0619, aqi: 12 },
+  { name: "Musanze", lat: -1.4780, lng: 29.6360, aqi: 40 },
+  { name: "Huye", lat: -2.5956, lng: 29.7390, aqi: 75 },
+  { name: "Nyagatare", lat: -1.2942, lng: 30.3286, aqi: 110 },
+  { name: "Rubavu", lat: -1.7514, lng: 29.2686, aqi: 160 },
+];
+
+const getAQIColor = (aqi) => {
+  if (aqi <= 50) return "green";
+  if (aqi <= 100) return "yellow";
+  if (aqi <= 150) return "orange";
+  if (aqi <= 200) return "red";
+  return "purple";
+};
+
+// Asthma Prevention Tips
+const preventionTips = [
+  {
+    icon: "💨",
+    title: "Stay Calm & Breathe Slowly",
+    description:
+      "Sit upright, take slow deep breaths, and try to stay calm during an attack."
+  },
+  {
+    icon: "💊",
+    title: "Use Your Inhaler",
+    description:
+      "Follow your prescribed inhaler routine. Take quick-relief medication as directed."
+  },
+  {
+    icon: "🏠",
+    title: "Avoid Triggers",
+    description:
+      "Stay away from smoke, dust, pollen, or strong odors that can worsen symptoms."
+  },
+  {
+    icon: "📞",
+    title: "Seek Help if Needed",
+    description:
+      "Call your doctor or emergency services if symptoms persist or worsen."
+  }
+];
 
 export default function LandingScreen({ onGetStarted, onLogin }) {
+  const [darkMode, setDarkMode] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [role, setRole] = useState("patient");
+  const [districtCount, setDistrictCount] = useState(0);
+  const [usersCount, setUsersCount] = useState(0);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+
+  // Animated counters
+  useEffect(() => {
+    const districtTarget = 30;
+    const usersTarget = 5000;
+    const districtInterval = setInterval(() => {
+      setDistrictCount((prev) => {
+        if (prev < districtTarget) return prev + 1;
+        clearInterval(districtInterval);
+        return prev;
+      });
+    }, 50);
+
+    const usersInterval = setInterval(() => {
+      setUsersCount((prev) => {
+        if (prev < usersTarget) return prev + 100;
+        clearInterval(usersInterval);
+        return prev;
+      });
+    }, 30);
+
+    return () => {
+      clearInterval(districtInterval);
+      clearInterval(usersInterval);
+    };
+  }, []);
+
   return (
-    <div className="0v8sbleb min-h-screen bg-slate-50 overflow-x-hidden">
-      {/* Hero Section */}
-      <div className="00voprv9 px-6 pt-6 pb-24">
-        {/* Sign In button in top right */}
-        <div className="05147ait flex justify-end mb-6">
-          <button 
-            onClick={onLogin} 
-            className="05t6rin8 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors"
-          >
-            SIGN IN
-          </button>
+    <div className="0fn4zej4 min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-slate-900 dark:to-slate-950 text-slate-800 dark:text-white transition-all duration-500">
+
+      {/* NAVBAR */}
+      <header className="0ncnl7qp fixed w-full backdrop-blur-md bg-white/70 dark:bg-slate-900/70 z-50 border-b border-slate-200 dark:border-slate-800">
+        <div className="0byqpaeb max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <h1 className="0am41dqy text-xl font-black text-blue-600">
+            🛡️ Asthma Shield
+          </h1>
+          <div className="0yqwcvct flex items-center gap-6">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="0bzdw2ug text-sm font-semibold hover:text-blue-600 transition"
+            >
+              {darkMode ? "☀️ Light" : "🌙 Dark"}
+            </button>
+            <button
+              onClick={() => setShowLogin(true)}
+              className="01tous6m bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition"
+            >
+              Login
+            </button>
+          </div>
         </div>
-        
-        <div className="0c2mp30m inline-flex items-center gap-3 px-3 py-2 bg-blue-50 rounded-full border border-blue-100 mb-6">
-          <div className="03rw3tdh w-1.5 h-1.5 rounded-full bg-blue-600"></div>
-          <span className="062ig0a0 text-[10px] font-black text-blue-600 tracking-wider">LIVE ENVIRONMENTAL MONITORING</span>
-        </div>
-        
-        <h1 className="05244ahc text-4xl md:text-5xl font-black text-slate-800 mb-4 leading-tight">
-          Protect Your Lungs,<br />
-          <span className="064y8dx4 text-blue-600">Breathe Rwanda.</span>
-        </h1>
-        
-        <p className="0lhpfsym text-slate-500 text-base leading-relaxed mb-8 max-w-xl">
-          Asthma Shield uses advanced AI and real-time climate data to protect you from respiratory risks across Rwanda.
+      </header>
+
+      <div className="00zsacva h-20"></div>
+
+      {/* HERO */}
+      <section className="0g0j730x text-center py-20 px-6 max-w-4xl mx-auto">
+        <h2 className="0zbyo9rd text-5xl font-black mb-6 leading-tight">
+          Protect Your Lungs <br />
+          <span className="0sykmx5x text-blue-600">Breathe Rwanda</span>
+        </h2>
+        <p className="0pchbdrl text-lg text-slate-600 dark:text-slate-300 mb-8">
+          AI-powered respiratory monitoring with real-time climate alerts and
+          asthma risk predictions.
         </p>
-        
-<div className="0oozc5id space-y-3 mb-10">
-          <button 
-            onClick={onGetStarted} 
-            className="039ief1a w-full bg-blue-600 text-white py-5 rounded-full text-xs font-black tracking-widest hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl active:scale-95"
+        <div className="0h5zi4hz flex flex-col sm:flex-row justify-center gap-4">
+          <button
+            onClick={onGetStarted}
+            className="0ojcekc1 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition-all"
           >
-            JOIN THE SHIELD
+            Get Started
           </button>
-          <button 
-onClick={() => {
-              const usersData = localStorage.getItem('rwanda_guard_users');
-              const users = usersData ? JSON.parse(usersData) : [];
-              const demoUser = users.find((u) => u.email === 'demo@asthma-shield.rw');
-              if (demoUser) {
-                const userData = {
-                  id: demoUser.id,
-                  email: demoUser.email,
-                  fullName: demoUser.fullName,
-                  phone: demoUser.phone,
-                  avatar: demoUser.avatar,
-                  createdAt: demoUser.createdAt
-                };
-                localStorage.setItem('rwanda_guard_user', JSON.stringify(userData));
-                window.location.href = '/?demo=true';
-              }
-            }}
-            className="039ief1a w-full bg-white text-blue-600 py-4 rounded-full text-xs font-black tracking-widest hover:bg-blue-50 transition-all border-2 border-blue-200"
+          <button
+            onClick={onLogin}
+            className="0tptpojl border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-50 dark:hover:bg-slate-800 transition"
           >
-            TRY DEMO
+            Try Demo
           </button>
         </div>
+      </section>
 
-        {/* Feature Card */}
-        <div className="0brpkakx bg-white rounded-[2rem] p-6 shadow-xl border border-slate-100">
-          <div className="0dnxlvyl flex justify-between items-start mb-5">
-            <div>
-              <p className="0cjz4tk8 text-[9px] font-black text-slate-400 tracking-wider mb-1">KIGALI SECTOR</p>
-              <h3 className="08kagwsq text-xl font-black text-slate-800">Clear Air Quality</h3>
-            </div>
-            <div className="0jgcd4vn w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center">
-              <span className="0ov15qfz text-xl text-emerald-600">✓</span>
-            </div>
-          </div>
-          
-          <div className="04rdugni grid grid-cols-2 gap-3 mb-3">
-            <div className="08fsnf9n bg-slate-50 p-4 rounded-2xl">
-              <p className="0duhh2wd text-[8px] font-bold text-slate-400 tracking-wider mb-1">TEMPERATURE</p>
-              <p className="0iyceedn text-lg font-black text-slate-800">24°C</p>
-            </div>
-            <div className="0asxamz0 bg-slate-50 p-4 rounded-2xl">
-              <p className="06ooa5ht text-[8px] font-bold text-slate-400 tracking-wider mb-1">AQI INDEX</p>
-              <p className="025ymw5y text-lg font-black text-emerald-500">12</p>
-            </div>
-          </div>
-          
-          <div className="0csf1k58 bg-blue-600 p-5 rounded-3xl flex justify-between items-center">
-            <div>
-              <p className="0e3n62rv text-[9px] font-bold text-blue-100 tracking-wider mb-1">AI MEDICAL GUARD</p>
-              <p className="0yq7guqg text-base font-black text-white">Online Consultations</p>
-            </div>
-            <div className="0sg35ahv w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
-              <span className="0tml3rkt text-lg">📹</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Features Section */}
-      <div className="0mecr1fu bg-white px-6 py-12">
-        <h2 className="0w6p71kt text-3xl font-black text-slate-800 text-center mb-3">Precision Protection</h2>
-        <p className="0ywo41xe text-sm text-slate-500 text-center mb-8 leading-relaxed">
-          Built specifically for the Rwandan landscape, combining local climate data with global AI excellence.
-        </p>
-        
-        <div className="0n7c2bm9 space-y-8">
-          <div className="0yazdbp2 flex gap-4">
-            <div className="0yrt3ef1 w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-              <span className="03gj0lvv text-3xl">☀️</span>
-            </div>
-            <div>
-              <h3 className="0mcsibo8 text-lg font-black text-slate-800 mb-2">Climate Tracking</h3>
-              <p className="09hqv6e3 text-sm text-slate-500 leading-relaxed">
-                Live temperature, humidity, and AQI updates from across all provinces in Rwanda.
-              </p>
-            </div>
-          </div>
-
-          <div className="0gnoohda flex gap-4">
-            <div className="0843cd77 w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-              <span className="0z9s5e6i text-3xl">👨⚕️</span>
-            </div>
-            <div>
-              <h3 className="0imjbchv text-lg font-black text-slate-800 mb-2">AI Medical Doctor</h3>
-              <p className="0iirdj85 text-sm text-slate-500 leading-relaxed">
-                24/7 video and voice consultations with an AI doctor trained on respiratory health protocols.
-              </p>
-            </div>
-          </div>
-
-          <div className="0e87tare flex gap-4">
-            <div className="09bmkyeq w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-              <span className="0diuidpi text-3xl">🔔</span>
-            </div>
-            <div>
-              <h3 className="0mws1v27 text-lg font-black text-slate-800 mb-2">Risk Alerts</h3>
-              <p className="02yooecd text-sm text-slate-500 leading-relaxed">
-                Intelligent notifications when air quality or pollen levels in your district reach risky levels.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="0ou5uzix bg-slate-900 px-6 py-12">
-        <div className="0q7e1x64 grid grid-cols-3 gap-4 text-center">
+      {/* STATS */}
+      <section className="0eut3mm7 py-16 bg-white dark:bg-slate-900">
+        <div className="0z7huud3 max-w-6xl mx-auto grid md:grid-cols-3 text-center gap-10">
           <div>
-            <p className="0o6vbcxb text-3xl font-black text-white mb-1">30+</p>
-            <p className="0hywl5f8 text-[10px] font-black text-slate-400 uppercase tracking-wider">Districts</p>
+            <p className="00rs8fxh text-4xl font-black text-blue-600">{districtCount}+</p>
+            <p className="0ectm3xp text-slate-500 dark:text-slate-400">Districts Covered</p>
           </div>
           <div>
-            <p className="0a94xklw text-3xl font-black text-white mb-1">24/7</p>
-            <p className="0kift3fc text-[10px] font-black text-slate-400 uppercase tracking-wider">Monitoring</p>
+            <p className="0ptbdhy1 text-4xl font-black text-blue-600">{usersCount}+</p>
+            <p className="03z9w0is text-slate-500 dark:text-slate-400">Active Users</p>
           </div>
           <div>
-            <p className="0i83lfjm text-3xl font-black text-white mb-1">AI</p>
-            <p className="0fji5yr4 text-[10px] font-black text-slate-400 uppercase tracking-wider">Protection</p>
+            <p className="07464uur text-4xl font-black text-blue-600">24/7</p>
+            <p className="0ysxuh0i text-slate-500 dark:text-slate-400">Monitoring</p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* CTA Section */}
-      <div className="0qlexfjz bg-blue-600 px-6 py-12 text-center">
-        <h2 className="0u2albcr text-2xl font-black text-white mb-3">Ready to Protect Your Health?</h2>
-        <p className="0rdyfaj3 text-blue-100 text-sm mb-6">Join thousands of Rwandans breathing easier with Asthma Shield.</p>
-        <button 
-          onClick={onGetStarted} 
-          className="0q86dthx bg-white text-blue-600 px-8 py-4 rounded-full text-xs font-black tracking-widest hover:bg-blue-50 transition-all shadow-lg"
+      {/* RWANDA MAP */}
+      <section className="0d36z5a0 py-20 px-6 text-center">
+        <h3 className="0jfwfvxa text-3xl font-black mb-8">Rwanda Asthma Risk Map</h3>
+        <MapContainer
+          center={[-1.9403, 29.8739]}
+          zoom={7}
+          scrollWheelZoom={false}
+          className="0b42sm2i h-96 w-full rounded-3xl shadow-lg"
         >
-          GET STARTED NOW
-        </button>
-      </div>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {rwandaDistricts.map((d, i) => (
+            <CircleMarker
+              key={i}
+              center={[d.lat, d.lng]}
+              radius={15}
+              pathOptions={{ color: getAQIColor(d.aqi), fillOpacity: 0.5 }}
+            >
+              <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                <div className="0xf0t5cf text-xs font-bold">
+                  {d.name} <br /> AQI: {d.aqi}
+                </div>
+              </Tooltip>
+            </CircleMarker>
+          ))}
+        </MapContainer>
+        <p className="0osg5ms0 mt-4 text-slate-600 dark:text-slate-400 text-sm">
+          Color-coded districts: Green (Good), Yellow (Moderate), Orange (Unhealthy for sensitive groups), Red (Unhealthy), Purple (Very Unhealthy)
+        </p>
+      </section>
 
-      {/* Footer */}
-      <div className="0iqgz22w bg-slate-800 py-10 text-center">
-        <p className="0p28nset text-base font-black text-white mb-3 tracking-wider">🛡️ ASTHMA SHIELD</p>
-        <p className="0xjpecfy text-[10px] font-black text-slate-500 tracking-widest">© 2024 Asthma Shield Rwanda</p>
+      {/* ASTHMA PREVENTION TIPS */}
+      <section className="00ptc088 py-20 px-6 bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-slate-900 dark:to-slate-950">
+        <div className="0smvg5b2 max-w-6xl mx-auto text-center mb-12">
+          <h3 className="0r0cj4fb text-4xl font-black mb-4">Asthma Prevention Tips</h3>
+          <p className="0nph9k69 text-slate-600 dark:text-slate-400">
+            Important steps to protect yourself and manage attacks effectively.
+          </p>
+        </div>
+        <div className="0tbpfp0t grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {preventionTips.map((tip, index) => (
+            <div
+              key={index}
+              className="0ppo61q1 bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300"
+            >
+              <div className="0n7zlq9n text-4xl mb-4">{tip.icon}</div>
+              <h4 className="09klfx7a text-xl font-bold mb-2">{tip.title}</h4>
+              <p className="028ajuvm text-slate-600 dark:text-slate-400 text-sm">{tip.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="0gn09l6c py-24 px-6">
+        <div className="0ffo9pe0 max-w-4xl mx-auto">
+          <h3 className="0jtr93wf text-4xl font-black text-center mb-12">FAQ</h3>
+          {[
+            {
+              q: "How does Asthma Shield protect me?",
+              a: "Monitors real-time climate and air quality, sends alerts for asthma risks."
+            },
+            {
+              q: "What should I do during an asthma attack?",
+              a: "Use your inhaler, stay calm, follow your doctor's advice, seek help if needed."
+            },
+            {
+              q: "Is the AI Doctor real?",
+              a: "Yes! It provides guidance based on respiratory medical protocols."
+            }
+          ].map((faq, i) => (
+            <details key={i} className="0xjrt5iy mb-4 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow hover:shadow-xl transition">
+              <summary className="011zd3sd font-semibold cursor-pointer">{faq.q}</summary>
+              <p className="04388y0h mt-2 text-slate-600 dark:text-slate-400">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="0li9nt7f py-20 text-center bg-blue-600 text-white">
+        <h3 className="0zk89yas text-4xl font-black mb-4">Ready to Breathe Safer?</h3>
+        <button
+          onClick={onGetStarted}
+          className="0258boq3 bg-white text-blue-600 px-10 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition-all"
+        >
+          Start Now
+        </button>
+      </section>
+
+      {/* LOGIN MODAL */}
+      {showLogin && (
+        <div className="0e9l4w3d fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="00e87wwf bg-white dark:bg-slate-900 p-8 rounded-3xl w-96 shadow-2xl">
+            <h3 className="0rdh53d9 text-2xl font-black mb-6 text-center">Login</h3>
+            <div className="0xq2i2qp flex justify-center gap-4 mb-6">
+              <button
+                onClick={() => setRole("patient")}
+                className={`0hupym3h px-4 py-2 rounded-full ${role === "patient" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              >
+                Patient
+              </button>
+              <button
+                onClick={() => setRole("admin")}
+                className={`0039ywng px-4 py-2 rounded-full ${role === "admin" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              >
+                Admin
+              </button>
+            </div>
+            <input type="email" placeholder="Email" className="0dioc4tq w-full mb-4 p-3 rounded-xl border"/>
+            <input type="password" placeholder="Password" className="049bok6l w-full mb-6 p-3 rounded-xl border"/>
+            <button className="0vtuqast w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Login as {role}</button>
+            <button
+              onClick={() => setShowLogin(false)}
+              className="0ccff5y0 mt-4 text-red-500 w-full"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* FOOTER */}
+      <footer className="0sfvz67t bg-slate-900 text-slate-300 pt-16 pb-8 px-6">
+        <div className="06sqv6p3 max-w-7xl mx-auto grid md:grid-cols-4 gap-10">
+          
+          {/* Brand */}
+          <div>
+            <h4 className="09ekc9gt text-white text-2xl font-extrabold mb-4 flex items-center gap-2">
+              <span className="0757l48p text-blue-600">🛡️</span> Asthma Shield
+            </h4>
+            <p className="0ixnt0c4 text-sm text-slate-400">
+              AI-powered respiratory monitoring across Rwanda. Stay informed and breathe safer every day.
+            </p>
+          </div>
+
+          {/* Product Links */}
+          <div>
+            <h5 className="01vbicat text-white font-semibold mb-4">Product</h5>
+            <ul className="0ionhqxe space-y-2 text-sm">
+              <li>
+                <a href="#tracking" className="0vj5fcca hover:text-blue-500 transition">Tracking</a>
+              </li>
+              <li>
+                <a href="#alerts" className="0xgv243w hover:text-blue-500 transition">Alerts</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 className="01t3xsve text-white font-semibold mb-4">Company</h5>
+            <ul className="0b2dd4ai space-y-2 text-sm">
+              <li>
+                <a href="#about" className="0mcb6rpa hover:text-blue-500 transition">About</a>
+              </li>
+              <li>
+                <a href="#privacy" className="0efenv6n hover:text-blue-500 transition">Privacy</a>
+              </li>
+              <li>
+                <a href="#terms" className="0dvr8pi9 hover:text-blue-500 transition">Terms</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="073kzibi text-white font-semibold mb-4">Contact</h5>
+            <ul className="02i8ycvh space-y-2 text-sm">
+              <li>
+                <a href="mailto:support@asthmashield.rw" className="0ujzgmva hover:text-blue-500 transition">
+                  support@asthmashield.rw
+                </a>
+              </li>
+              <li>
+                <div className="0huzz90h flex gap-3 mt-2">
+                  <a href="#" className="01tpskr2 hover:text-blue-500 transition">📘</a>
+                  <a href="#" className="0ewl9c0x hover:text-blue-500 transition">💼</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="0auiizwq border-t border-slate-800 mt-12 pt-6 text-center text-xs text-slate-500 flex flex-col md:flex-row items-center justify-between gap-2">
+          <span>© {new Date().getFullYear()} Asthma Shield Rwanda</span>
+        </div>
+      </footer>
       </div>
-    </div>
-  );
-}
+    );
+  }

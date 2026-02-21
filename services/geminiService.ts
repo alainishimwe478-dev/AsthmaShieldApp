@@ -5,6 +5,45 @@ import { SYSTEM_INSTRUCTION } from "../constants";
 const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY || "YOUR_GEMINI_API_KEY";
 const ai = new GoogleGenerativeAI(API_KEY);
 
+// Chat message type for AI Doctor
+interface ChatMessage {
+  role: 'user' | 'bot';
+  text: string;
+}
+
+/**
+ * Get AI Doctor response for chat conversations
+ * @param userMessage - The user's question
+ * @param chatHistory - Previous chat messages
+ * @returns AI response string
+ */
+export const getAIDoctorResponse = async (
+  userMessage: string, 
+  chatHistory: ChatMessage[]
+): Promise<string> => {
+  try {
+    const model = ai.getGenerativeModel({
+      model: 'gemini-1.5-flash',
+      systemInstruction: `${SYSTEM_INSTRUCTION} You are Dr. Shield, a friendly AI doctor specializing in asthma and respiratory health. Provide helpful, clear, and concise answers.`
+    });
+
+    // Build conversation context from history
+    let conversationContext = chatHistory
+      .map(msg => `${msg.role === 'user' ? 'User' : 'Doctor'}: ${msg.text}`)
+      .join('\n');
+    
+    const prompt = conversationContext 
+      ? `${conversationContext}\nUser: ${userMessage}`
+      : userMessage;
+
+    const response = await model.generateContent(prompt);
+    return response.response.text() || "I couldn't process that. Can you try again?";
+  } catch (error) {
+    console.error("AI Doctor Error:", error);
+    return "Connection error. Please try again.";
+  }
+};
+
 export const getAsthmaInsights = async (logs: SymptomLog[]): Promise<AIInsight | null> => {
   if (logs.length === 0) return null;
 

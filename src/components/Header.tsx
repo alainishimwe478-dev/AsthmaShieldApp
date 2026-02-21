@@ -1,13 +1,20 @@
 import React from "react";
 
+interface HeaderProps {
+  title?: string;
+  showBackButton?: boolean;
+  onBack?: () => void;
+  rightElement?: React.ReactNode;
+  showLogo?: boolean;
+}
+
 export default function Header({
   title,
   showBackButton = false,
   onBack,
   rightElement,
   showLogo = true,
-}) {
-}) {
+}: HeaderProps) {
   return (
     <header className="0we2doey bg-white px-6 py-4 border-b border-slate-100 flex items-center justify-between z-10">
       <div className="005lmjf6 flex items-center gap-3">

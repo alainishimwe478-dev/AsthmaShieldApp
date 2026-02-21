@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
 import SplashScreen from "./screens/SplashScreen";
-import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import MedicationScreen from "./screens/MedicationScreen";
@@ -57,14 +56,6 @@ export default function App() {
           gestureEnabled: true,
         }}
       >
-        <Stack.Screen name="Landing">
-          {({ navigation }) => (
-            <LandingScreen
-              onGetStarted={() => navigation.navigate("Login")}
-              onLogin={() => navigation.navigate("Login")}
-            />
-          )}
-        </Stack.Screen>
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Main" component={MainTabs} />

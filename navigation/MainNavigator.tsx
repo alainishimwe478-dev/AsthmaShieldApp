@@ -7,7 +7,7 @@ import RegisterScreen from '../screens/RegisterScreen';
 import DashboardScreen from '../screens/DashboardScreen';
 
 export default function MainNavigator() {
-  const [screen, setScreen] = useState<'loading' | 'landing' | 'login' | 'register' | 'dashboard'>('loading');
+  const [screen, setScreen] = useState<'loading' | 'landing' | 'login' | 'register' | 'dashboard'>('landing');
   const [userData, setUserData] = useState<{ email: string; name: string } | null>(null);
 
   useEffect(() => {
@@ -16,15 +16,13 @@ export default function MainNavigator() {
 
   const checkAuth = async () => {
     try {
-      const hasSeenLanding = await AsyncStorage.getItem('hasSeenLanding');
       const user = await AsyncStorage.getItem('currentUser');
       
       if (user) {
         setUserData(JSON.parse(user));
         setScreen('dashboard');
-      } else if (hasSeenLanding) {
-        setScreen('login');
       } else {
+        // Always show landing page first - remove the hasSeenLanding check
         setScreen('landing');
       }
     } catch {
@@ -54,12 +52,10 @@ export default function MainNavigator() {
   if (screen === 'landing') {
     return (
       <LandingScreen
-        onGetStarted={async () => {
-          await AsyncStorage.setItem('hasSeenLanding', 'true');
+        onGetStarted={() => {
           setScreen('register');
         }}
-        onLogin={async () => {
-          await AsyncStorage.setItem('hasSeenLanding', 'true');
+        onLogin={() => {
           setScreen('login');
         }}
       />

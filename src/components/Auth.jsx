@@ -83,16 +83,16 @@ export default function Auth({ onAuthComplete }) {
   };
 
   return (
-    <div className="02rqfl5p min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="052qgjh0 w-full max-w-md">
+    <div className="0eou3opz min-h-screen bg-slate-50 flex items-center justify-center p-6">
+      <div className="0rbmjixp w-full max-w-md">
         {/* Logo */}
-        <div className="0ymgd5z4 text-center mb-10">
+        <div className="0xcznr7z text-center mb-10">
           <div
-            className="03d4r9c5 w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg"
+            className="010igr2s w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg cursor-pointer"
             onClick={() => (window.location.href = "/")}
           >
             <svg
-              className="0wnoxvum w-8 h-8 text-white"
+              className="0m0p60lf w-8 h-8 text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -104,10 +104,10 @@ export default function Auth({ onAuthComplete }) {
               />
             </svg>
           </div>
-          <h1 className="05dsjo9q text-3xl font-black text-slate-800 tracking-tight">
+          <h1 className="04nd0pvl text-3xl font-black text-slate-800 tracking-tight">
             {isLogin ? "Welcome Back" : "Join the Shield"}
           </h1>
-          <p className="02gjkkkt text-slate-500 font-medium mt-2">
+          <p className="0btig0ov text-slate-500 font-medium mt-2">
             {isLogin
               ? "Sign in to protect your health"
               : "Create your health account"}
@@ -115,15 +115,15 @@ export default function Auth({ onAuthComplete }) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="0t70et9o space-y-5">
+        <form onSubmit={handleSubmit} className="0da58brd space-y-5">
           {!isLogin && (
             <div>
-              <label className="00t50qy5 block text-xs font-black text-slate-500 mb-2 tracking-wider">
+              <label className="0u540dcc block text-xs font-black text-slate-500 mb-2 tracking-wider">
                 FULL NAME
               </label>
               <input
                 type="text"
-                className="0nkt4hfb w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
+                className="0qmfzxe7 w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
                 placeholder="Your full name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -132,12 +132,12 @@ export default function Auth({ onAuthComplete }) {
           )}
 
           <div>
-            <label className="0mzna6tt block text-xs font-black text-slate-500 mb-2 tracking-wider">
+            <label className="07v7nln5 block text-xs font-black text-slate-500 mb-2 tracking-wider">
               EMAIL ADDRESS
             </label>
             <input
               type="email"
-              className="0nhw6ycb w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
+              className="0ajbdrr6 w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
               placeholder="your.email@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -145,12 +145,12 @@ export default function Auth({ onAuthComplete }) {
           </div>
 
           <div>
-            <label className="0bp2ti98 block text-xs font-black text-slate-500 mb-2 tracking-wider">
+            <label className="03sq1ml3 block text-xs font-black text-slate-500 mb-2 tracking-wider">
               PASSWORD
             </label>
             <input
               type="password"
-              className="089s8f1c w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
+              className="0qvo3jbm w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -160,7 +160,7 @@ export default function Auth({ onAuthComplete }) {
           <button
             type="submit"
             disabled={loading}
-            className="00qna3og w-full bg-slate-800 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-slate-900 transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
+            className="04af5wn2 w-full bg-slate-800 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-slate-900 transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
           >
             {loading
               ? "Please wait..."
@@ -194,7 +194,7 @@ export default function Auth({ onAuthComplete }) {
                   onAuthComplete(userData);
                 }
               }}
-              className="00qna3og w-full mt-3 bg-blue-600 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl active:scale-95"
+              className="0cvhwyxl w-full mt-3 bg-blue-600 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl active:scale-95"
             >
               TRY DEMO ACCOUNT
             </button>
@@ -202,23 +202,23 @@ export default function Auth({ onAuthComplete }) {
         </form>
 
         {/* Toggle */}
-        <div className="0o4f8fkn text-center mt-8">
-          <span className="0j00p5ag text-slate-500 font-medium">
+        <div className="0xqb6uxt text-center mt-8">
+          <span className="03e7oskn text-slate-500 font-medium">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
           </span>
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="0cq7mzj5 text-blue-600 font-black hover:text-blue-700"
+            className="08atrqn7 text-blue-600 font-black hover:text-blue-700"
           >
             {isLogin ? "Join Now" : "Sign In"}
           </button>
         </div>
 
         {/* Back to Home */}
-        <div className="017a0rj1 text-center mt-6">
+        <div className="0esdbxz6 text-center mt-6">
           <button
             onClick={() => (window.location.href = "/")}
-            className="0gq67iip text-slate-400 text-xs font-black uppercase tracking-wider hover:text-slate-600"
+            className="0zp3hdiw text-slate-400 text-xs font-black uppercase tracking-wider hover:text-slate-600"
           >
             ← Back to Home
           </button>
