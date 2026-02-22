@@ -5,7 +5,22 @@ export default function Auth({ onAuthComplete }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  // Emergency contact fields
+  const [emergencyName, setEmergencyName] = useState("");
+  const [emergencyPhone, setEmergencyPhone] = useState("");
+  const [emergencyRelationship, setEmergencyRelationship] = useState("");
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
+
+  const handleAuthSuccess = (userData) => {
+    setRedirecting(true);
+    // Small delay for smooth UI transition
+    setTimeout(() => {
+      onAuthComplete(userData);
+    }, 300);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,18 +40,21 @@ export default function Auth({ onAuthComplete }) {
             id: user.id,
             email: user.email,
             fullName: user.fullName,
+            phone: user.phone,
+            dateOfBirth: user.dateOfBirth,
+            emergencyContact: user.emergencyContact,
             avatar: user.avatar,
             createdAt: user.createdAt,
           };
           localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
-          onAuthComplete(userData);
+          handleAuthSuccess(userData);
         } else {
           alert("Invalid credentials. Please check your email and password.");
         }
       } else {
         // Register logic
         if (!email || !password || !fullName) {
-          alert("Please fill all fields");
+          alert("Please fill all required fields");
           setLoading(false);
           return;
         }
@@ -56,6 +74,16 @@ export default function Auth({ onAuthComplete }) {
           email,
           password,
           fullName,
+          phone,
+          dateOfBirth,
+          emergencyContact:
+            emergencyName && emergencyPhone
+              ? {
+                  name: emergencyName,
+                  phone: emergencyPhone,
+                  relationship: emergencyRelationship,
+                }
+              : undefined,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
           createdAt: Date.now(),
         };
@@ -67,12 +95,15 @@ export default function Auth({ onAuthComplete }) {
           id: newUser.id,
           email: newUser.email,
           fullName: newUser.fullName,
+          phone: newUser.phone,
+          dateOfBirth: newUser.dateOfBirth,
+          emergencyContact: newUser.emergencyContact,
           avatar: newUser.avatar,
           createdAt: newUser.createdAt,
         };
 
         localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
-        onAuthComplete(userData);
+        handleAuthSuccess(userData);
       }
     } catch (error) {
       console.error("Auth error:", error);
@@ -83,84 +114,163 @@ export default function Auth({ onAuthComplete }) {
   };
 
   return (
-    <div className="0eou3opz min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="0rbmjixp w-full max-w-md">
+    <div className="0z95c7x5 min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <div className="0vwsr2w2 w-full max-w-md">
         {/* Logo */}
-        <div className="0xcznr7z text-center mb-10">
-          <div
-            className="010igr2s w-16 h-16 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg cursor-pointer"
-            onClick={() => (window.location.href = "/")}
-          >
+        <div className="0h4qv4m3 text-center mb-8">
+          <div className="0j3b4w5x inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-3xl mb-4">
             <svg
-              className="0m0p60lf w-8 h-8 text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+              className="0qmc8r6s w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <path d="M13 7H7v6h6V7z" />
               <path
-                fillRule="evenodd"
-                d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 010-2h1V9a2 2 0 012-2h2V2z"
-                clipRule="evenodd"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
               />
             </svg>
           </div>
-          <h1 className="04nd0pvl text-3xl font-black text-slate-800 tracking-tight">
-            {isLogin ? "Welcome Back" : "Join the Shield"}
+          <h1 className="0xkfj7w9 text-3xl font-black text-white tracking-tight">
+            AsthmaShield
           </h1>
-          <p className="0btig0ov text-slate-500 font-medium mt-2">
+          <p className="0mcp5nqk text-slate-400 mt-2">
             {isLogin
-              ? "Sign in to protect your health"
-              : "Create your health account"}
+              ? "Welcome back! Sign in to continue."
+              : "Create your account to get started."}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="0da58brd space-y-5">
+        <form onSubmit={handleSubmit} className="0g1p8v3w space-y-4">
           {!isLogin && (
-            <div>
-              <label className="0u540dcc block text-xs font-black text-slate-500 mb-2 tracking-wider">
-                FULL NAME
-              </label>
-              <input
-                type="text"
-                className="0qmfzxe7 w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
-                placeholder="Your full name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </div>
+            <>
+              <div>
+                <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                  placeholder="+250 789 123 456"
+                />
+              </div>
+
+              <div>
+                <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                />
+              </div>
+
+              {/* Emergency Contact Section */}
+              <div className="05odbqmc mt-6 pt-6 border-t border-slate-700">
+                <p className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
+                  Emergency Contact (Optional)
+                </p>
+
+                <div className="05corlrh space-y-4">
+                  <div>
+                    <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                      Contact Name
+                    </label>
+                    <input
+                      type="text"
+                      value={emergencyName}
+                      onChange={(e) => setEmergencyName(e.target.value)}
+                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                      placeholder="Emergency contact name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                      Contact Phone
+                    </label>
+                    <input
+                      type="tel"
+                      value={emergencyPhone}
+                      onChange={(e) => setEmergencyPhone(e.target.value)}
+                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                      placeholder="+250 789 123 456"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                      Relationship
+                    </label>
+                    <select
+                      value={emergencyRelationship}
+                      onChange={(e) => setEmergencyRelationship(e.target.value)}
+                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                    >
+                      <option value="">Select relationship</option>
+                      <option value="parent">Parent</option>
+                      <option value="spouse">Spouse</option>
+                      <option value="sibling">Sibling</option>
+                      <option value="child">Child</option>
+                      <option value="friend">Friend</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
 
           <div>
-            <label className="07v7nln5 block text-xs font-black text-slate-500 mb-2 tracking-wider">
-              EMAIL ADDRESS
+            <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+              Email Address
             </label>
             <input
               type="email"
-              className="0ajbdrr6 w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
-              placeholder="your.email@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+              placeholder="Enter your email"
             />
           </div>
 
           <div>
-            <label className="03sq1ml3 block text-xs font-black text-slate-500 mb-2 tracking-wider">
-              PASSWORD
+            <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+              Password
             </label>
             <input
               type="password"
-              className="0qvo3jbm w-full bg-white rounded-2xl px-5 py-4 text-slate-800 border-2 border-slate-200 font-medium focus:outline-none focus:border-blue-600 transition-colors"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+              placeholder="Enter your password"
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
-            className="04af5wn2 w-full bg-slate-800 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-slate-900 transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
+            className="0cvhwyxl w-full bg-blue-600 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-slate-900 transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
           >
             {loading
               ? "Please wait..."
@@ -168,6 +278,25 @@ export default function Auth({ onAuthComplete }) {
                 ? "SIGN IN"
                 : "CREATE ACCOUNT"}
           </button>
+
+          {/* Demo Credentials Info */}
+          {isLogin && (
+            <div className="0cazlui4 0demo-creds mt-4 p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
+              <p className="0a2pw8by 0demo-title text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                Demo Credentials
+              </p>
+              <div className="0bt1j5q1 0demo-info text-xs text-slate-300 space-y-1">
+                <p>
+                  <span className="0k3pxvag text-slate-500">Email:</span>{" "}
+                  demo@asthma-shield.rw
+                </p>
+                <p>
+                  <span className="0ycvqd8u text-slate-500">Password:</span>{" "}
+                  demo123
+                </p>
+              </div>
+            </div>
+          )}
 
           {isLogin && (
             <button
@@ -191,7 +320,7 @@ export default function Auth({ onAuthComplete }) {
                     "rwanda_guard_user",
                     JSON.stringify(userData),
                   );
-                  onAuthComplete(userData);
+                  handleAuthSuccess(userData);
                 }
               }}
               className="0cvhwyxl w-full mt-3 bg-blue-600 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl active:scale-95"

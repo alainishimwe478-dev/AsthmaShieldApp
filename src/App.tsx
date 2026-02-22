@@ -5,6 +5,7 @@ import EnvironmentalDashboard from './components/EnvironmentalDashboard';
 import { DoctorLive } from './components/DoctorLive';
 import Auth from './components/Auth';
 import LandingPage from './components/LandingScreen';
+import DoctorDashboard from './components/DoctorDashboard';
 
 const App: React.FC = () => {
   const [status, setStatus] = useState<AppStatus>(AppStatus.IDLE);
@@ -13,8 +14,8 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [initialized, setInitialized] = useState(false);
   
-  // 'home' is the mandatory default view to ensure LandingPage is shown first.
-  const [view, setView] = useState<'home' | 'dashboard' | 'auth'>('home');
+// 'home' is the mandatory default view to ensure LandingPage is shown first.
+  const [view, setView] = useState<'home' | 'dashboard' | 'auth' | 'doctor'>('home');
 
   // Initialize demo user on mount
   useEffect(() => {
@@ -147,11 +148,17 @@ const App: React.FC = () => {
         </div>
         
         <div className="0cdckdyo flex items-center gap-4">
-          <button 
+<button 
             onClick={() => setView('home')}
             className="0kxmh75r hidden sm:block text-sm font-semibold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors mr-2"
           >
             Home
+          </button>
+          <button 
+            onClick={() => setView('doctor')}
+            className="0kxmh75r hidden sm:block text-sm font-semibold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors mr-2"
+          >
+            Doctor Panel
           </button>
           <div className="0sovkro1 hidden sm:flex flex-col items-end mr-2">
             <span className="0gk8masz text-xs font-semibold text-slate-300 uppercase tracking-widest leading-none">Active</span>
@@ -186,11 +193,16 @@ const App: React.FC = () => {
         />
       </main>
 
-      {isConsulting && data && (
+{isConsulting && data && (
         <DoctorLive 
           envSummary={data.summary} 
           onClose={() => setIsConsulting(false)} 
         />
+      )}
+
+      {/* Doctor Dashboard View */}
+      {view === 'doctor' && (
+        <DoctorDashboard onClose={() => setView('dashboard')} />
       )}
 
       {status === AppStatus.ERROR && (

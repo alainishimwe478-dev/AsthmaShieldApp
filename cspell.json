@@ -1,0 +1,33 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "Salbutamol",
+    "Seretide",
+    "Fluticasone",
+    "Salmeterol",
+    "Symbicort",
+    "Budesonide",
+    "Formoterol",
+    "Flovent",
+    "Singulair",
+    "Montelukast",
+    "peakflow",
+    "peakFlow",
+    "Musanze",
+    "Huye",
+    "Nyagatare",
+    "Rubavu",
+    "Kigali",
+    "Rwanda",
+    "asthmashield"
+  ],
+  "ignoreRegExpList": [
+    "/className=\"0[a-z0-9]+\\s[a-zA-Z]/g"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "*.min.css",
+    "*.min.js"
+  ]
+}
