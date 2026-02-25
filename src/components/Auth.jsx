@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 export default function Auth({ onAuthComplete }) {
   const [isLogin, setIsLogin] = useState(true);
+  const [userType, setUserType] = useState("patient");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -11,6 +12,9 @@ export default function Auth({ onAuthComplete }) {
   const [emergencyName, setEmergencyName] = useState("");
   const [emergencyPhone, setEmergencyPhone] = useState("");
   const [emergencyRelationship, setEmergencyRelationship] = useState("");
+  // Doctor specific fields
+  const [licenseNumber, setLicenseNumber] = useState("");
+  const [specialization, setSpecialization] = useState("");
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
 
@@ -28,9 +32,10 @@ export default function Auth({ onAuthComplete }) {
 
     try {
       if (isLogin) {
-        // Login logic
-        const usersData = localStorage.getItem("rwanda_guard_users");
+        // Login logic - separate for patient and doctor
+        const usersData = localStorage.getItem(userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users");
         const users = usersData ? JSON.parse(usersData) : [];
+        
         const user = users.find(
           (u) => u.email === email && u.password === password,
         );
@@ -45,11 +50,14 @@ export default function Auth({ onAuthComplete }) {
             emergencyContact: user.emergencyContact,
             avatar: user.avatar,
             createdAt: user.createdAt,
+            isDoctor: userType === "doctor",
+            licenseNumber: user.licenseNumber,
+            specialization: user.specialization,
           };
           localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
           handleAuthSuccess(userData);
         } else {
-          alert("Invalid credentials. Please check your email and password.");
+          alert(`Invalid ${userType} credentials. Please check your email and password.`);
         }
       } else {
         // Register logic
@@ -59,7 +67,8 @@ export default function Auth({ onAuthComplete }) {
           return;
         }
 
-        const usersData = localStorage.getItem("rwanda_guard_users");
+        const storageKey = userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
+        const usersData = localStorage.getItem(storageKey);
         const users = usersData ? JSON.parse(usersData) : [];
 
         // Check if user already exists
@@ -86,10 +95,15 @@ export default function Auth({ onAuthComplete }) {
               : undefined,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
           createdAt: Date.now(),
+          // Doctor specific fields
+          ...(userType === "doctor" && {
+            licenseNumber,
+            specialization,
+          }),
         };
 
         users.push(newUser);
-        localStorage.setItem("rwanda_guard_users", JSON.stringify(users));
+        localStorage.setItem(storageKey, JSON.stringify(users));
 
         const userData = {
           id: newUser.id,
@@ -100,6 +114,9 @@ export default function Auth({ onAuthComplete }) {
           emergencyContact: newUser.emergencyContact,
           avatar: newUser.avatar,
           createdAt: newUser.createdAt,
+          isDoctor: userType === "doctor",
+          licenseNumber: newUser.licenseNumber,
+          specialization: newUser.specialization,
         };
 
         localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
@@ -110,6 +127,32 @@ export default function Auth({ onAuthComplete }) {
       alert("An error occurred. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Quick login for demo accounts
+  const handleQuickLogin = (type) => {
+    const storageKey = type === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
+    const usersData = localStorage.getItem(storageKey);
+    const users = usersData ? JSON.parse(usersData) : [];
+    
+    const demoEmail = type === "doctor" ? "doctor@asthma-shield.rw" : "demo@asthma-shield.rw";
+    const demoUser = users.find((u) => u.email === demoEmail);
+    
+    if (demoUser) {
+      const userData = {
+        id: demoUser.id,
+        email: demoUser.email,
+        fullName: demoUser.fullName,
+        phone: demoUser.phone,
+        avatar: demoUser.avatar,
+        createdAt: demoUser.createdAt,
+        isDoctor: type === "doctor",
+        licenseNumber: demoUser.licenseNumber,
+        specialization: demoUser.specialization,
+      };
+      localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
+      handleAuthSuccess(userData);
     }
   };
 
@@ -134,13 +177,39 @@ export default function Auth({ onAuthComplete }) {
             </svg>
           </div>
           <h1 className="0xkfj7w9 text-3xl font-black text-white tracking-tight">
-            AsthmaShield
+            {userType === "doctor" ? "Dr. Panel" : "AsthmaShield"}
           </h1>
           <p className="0mcp5nqk text-slate-400 mt-2">
             {isLogin
-              ? "Welcome back! Sign in to continue."
-              : "Create your account to get started."}
+              ? `Welcome back! Sign in as ${userType}.`
+              : `Create your ${userType} account to get started.`}
           </p>
+        </div>
+
+        {/* User Type Toggle */}
+        <div className="03l176xp 0user-type-toggle mb-6 p-1 bg-slate-800 rounded-2xl flex">
+          <button
+            type="button"
+            onClick={() => setUserType("patient")}
+            className={`0k5atgbn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
+              userType === "patient"
+                ? "bg-blue-600 text-white shadow-lg"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            👤 Patient
+          </button>
+          <button
+            type="button"
+            onClick={() => setUserType("doctor")}
+            className={`0lreydxh flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
+              userType === "doctor"
+                ? "bg-emerald-600 text-white shadow-lg"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            🩺 Doctor
+          </button>
         </div>
 
         {/* Form */}
@@ -174,71 +243,113 @@ export default function Auth({ onAuthComplete }) {
                 />
               </div>
 
-              <div>
-                <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
-                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
-                />
-              </div>
+              {userType === "patient" && (
+                <div>
+                  <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    value={dateOfBirth}
+                    onChange={(e) => setDateOfBirth(e.target.value)}
+                    className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                  />
+                </div>
+              )}
 
-              {/* Emergency Contact Section */}
-              <div className="05odbqmc mt-6 pt-6 border-t border-slate-700">
-                <p className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
-                  Emergency Contact (Optional)
-                </p>
-
-                <div className="05corlrh space-y-4">
+              {/* Doctor-specific registration fields */}
+              {userType === "doctor" && (
+                <>
                   <div>
-                    <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
-                      Contact Name
+                    <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                      Medical License Number *
                     </label>
                     <input
                       type="text"
-                      value={emergencyName}
-                      onChange={(e) => setEmergencyName(e.target.value)}
-                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
-                      placeholder="Emergency contact name"
+                      value={licenseNumber}
+                      onChange={(e) => setLicenseNumber(e.target.value)}
+                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-emerald-500 transition"
+                      placeholder="e.g., MD-2020-12345"
+                      required
                     />
                   </div>
 
                   <div>
-                    <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
-                      Contact Phone
-                    </label>
-                    <input
-                      type="tel"
-                      value={emergencyPhone}
-                      onChange={(e) => setEmergencyPhone(e.target.value)}
-                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
-                      placeholder="+250 789 123 456"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
-                      Relationship
+                    <label className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
+                      Specialization *
                     </label>
                     <select
-                      value={emergencyRelationship}
-                      onChange={(e) => setEmergencyRelationship(e.target.value)}
-                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                      value={specialization}
+                      onChange={(e) => setSpecialization(e.target.value)}
+                      className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-emerald-500 transition"
+                      required
                     >
-                      <option value="">Select relationship</option>
-                      <option value="parent">Parent</option>
-                      <option value="spouse">Spouse</option>
-                      <option value="sibling">Sibling</option>
-                      <option value="child">Child</option>
-                      <option value="friend">Friend</option>
+                      <option value="">Select specialization</option>
+                      <option value="pulmonologist">Pulmonologist</option>
+                      <option value="allergist">Allergist</option>
+                      <option value="general_practitioner">General Practitioner</option>
+                      <option value="pediatrician">Pediatrician</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
+                </>
+              )}
+
+              {/* Emergency Contact Section - Only for patients */}
+              {userType === "patient" && (
+                <div className="05odbqmc mt-6 pt-6 border-t border-slate-700">
+                  <p className="0d4s9q2w block text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
+                    Emergency Contact (Optional)
+                  </p>
+
+                  <div className="05corlrh space-y-4">
+                    <div>
+                      <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                        Contact Name
+                      </label>
+                      <input
+                        type="text"
+                        value={emergencyName}
+                        onChange={(e) => setEmergencyName(e.target.value)}
+                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                        placeholder="Emergency contact name"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                        Contact Phone
+                      </label>
+                      <input
+                        type="tel"
+                        value={emergencyPhone}
+                        onChange={(e) => setEmergencyPhone(e.target.value)}
+                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                        placeholder="+250 789 123 456"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="0d4s9q2w block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">
+                        Relationship
+                      </label>
+                      <select
+                        value={emergencyRelationship}
+                        onChange={(e) => setEmergencyRelationship(e.target.value)}
+                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                      >
+                        <option value="">Select relationship</option>
+                        <option value="parent">Parent</option>
+                        <option value="spouse">Spouse</option>
+                        <option value="sibling">Sibling</option>
+                        <option value="child">Child</option>
+                        <option value="friend">Friend</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
 
@@ -270,29 +381,35 @@ export default function Auth({ onAuthComplete }) {
 
           <button
             type="submit"
-            className="0cvhwyxl w-full bg-blue-600 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-slate-900 transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
+            className={`0cvhwyxl w-full text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95 disabled:opacity-50 ${
+              userType === "doctor" ? "bg-emerald-600" : "bg-blue-600"
+            }`}
           >
             {loading
               ? "Please wait..."
               : isLogin
-                ? "SIGN IN"
-                : "CREATE ACCOUNT"}
+                ? userType === "doctor"
+                  ? "LOGIN AS DOCTOR"
+                  : "SIGN IN"
+                : userType === "doctor"
+                  ? "REGISTER AS DOCTOR"
+                  : "CREATE ACCOUNT"}
           </button>
 
           {/* Demo Credentials Info */}
           {isLogin && (
             <div className="0cazlui4 0demo-creds mt-4 p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
               <p className="0a2pw8by 0demo-title text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
-                Demo Credentials
+                Demo {userType === "doctor" ? "Doctor" : "Patient"} Credentials
               </p>
               <div className="0bt1j5q1 0demo-info text-xs text-slate-300 space-y-1">
                 <p>
                   <span className="0k3pxvag text-slate-500">Email:</span>{" "}
-                  demo@asthma-shield.rw
+                  {userType === "doctor" ? "doctor@asthma-shield.rw" : "demo@asthma-shield.rw"}
                 </p>
                 <p>
                   <span className="0ycvqd8u text-slate-500">Password:</span>{" "}
-                  demo123
+                  {userType === "doctor" ? "doctor123" : "demo123"}
                 </p>
               </div>
             </div>
@@ -301,31 +418,12 @@ export default function Auth({ onAuthComplete }) {
           {isLogin && (
             <button
               type="button"
-              onClick={() => {
-                const usersData = localStorage.getItem("rwanda_guard_users");
-                const users = usersData ? JSON.parse(usersData) : [];
-                const demoUser = users.find(
-                  (u) => u.email === "demo@asthma-shield.rw",
-                );
-                if (demoUser) {
-                  const userData = {
-                    id: demoUser.id,
-                    email: demoUser.email,
-                    fullName: demoUser.fullName,
-                    phone: demoUser.phone,
-                    avatar: demoUser.avatar,
-                    createdAt: demoUser.createdAt,
-                  };
-                  localStorage.setItem(
-                    "rwanda_guard_user",
-                    JSON.stringify(userData),
-                  );
-                  handleAuthSuccess(userData);
-                }
-              }}
-              className="0cvhwyxl w-full mt-3 bg-blue-600 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl active:scale-95"
+              onClick={() => handleQuickLogin(userType)}
+              className={`0cvhwyxl w-full mt-3 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95 ${
+                userType === "doctor" ? "bg-emerald-600" : "bg-blue-600"
+              }`}
             >
-              TRY DEMO ACCOUNT
+              {userType === "doctor" ? "🚀 LOGIN AS DEMO DOCTOR" : "TRY DEMO ACCOUNT"}
             </button>
           )}
         </form>

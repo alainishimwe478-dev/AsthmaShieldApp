@@ -65,6 +65,7 @@ export interface User {
   createdAt: number;
   dateOfBirth?: string;
   emergencyContact?: EmergencyContact;
+  isDoctor?: boolean;
 }
 
 // Emergency Contact interface

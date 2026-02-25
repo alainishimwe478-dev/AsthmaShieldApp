@@ -98,7 +98,7 @@ export default function LandingScreen({ onGetStarted, onLogin }) {
           <div className="01xugqmk flex justify-between items-center px-6 lg:px-10 py-5">
             <div className="0qzoel70 lg:hidden w-10"></div>
             <h2 className="0qwidanv text-xl font-bold text-slate-800 dark:text-white hidden lg:block">
-              Welcome to AsthmaShield
+              AsthmaShield
             </h2>
             <h2 className="0bjxq4me text-xl font-bold text-slate-800 dark:text-white lg:hidden">
               Home
