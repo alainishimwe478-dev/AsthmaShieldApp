@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from '../assets/favicon.png';
 
 const navItems = [
   { id: 'dashboard', icon: '📊', label: 'Dashboard', active: true },
@@ -29,9 +30,7 @@ export default function Sidebar({ onNavigate, collapsed = false }) {
       {/* Logo Section */}
       <div className="0hg3cegw p-6 border-b border-slate-100">
         <div className="05lmobjk flex items-center gap-3">
-          <div className="0s6bdrbm w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30">
-            <span className="0yhz8ysz text-xl">🛡️</span>
-          </div>
+          <img src={logo} alt="Asthma Shield Logo" className="0s6bdrbm w-10 h-10 rounded-2xl" />
           {!isCollapsed && (
             <div className="01t0mm26 flex flex-col">
               <span className="0uch72nk font-black text-slate-800 text-lg tracking-tight">AsthmaShield</span>

@@ -10,6 +10,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { NavLink, useLocation } from "react-router-dom";
 import ConsultationPage from "./ConsultationPage";
 import PatientDetailModal from "./PatientDetailModal";
+import { generateWeeklyReport, generateMonthlyReport } from "../lib/reportGenerator";
 
 // Mock Data
 const patientTrends = [
@@ -373,7 +374,10 @@ export default function DoctorDashboard({ onClose, onNavigate }: DoctorDashboard
                 <Calendar className="0uskep8x w-8 h-8 text-blue-600 mb-4" />
                 <h4 className={`0z3shw92 font-bold text-lg mb-2 ${darkMode ? 'text-white' : ''}`}>Weekly Summary</h4>
                 <p className={`0ok2r5aj text-sm ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>Download weekly patient summary reports.</p>
-                <button className="0zcstri7 mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg">
+<button 
+                  onClick={() => generateWeeklyReport(mockPatients)}
+                  className="0zcstri7 mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg"
+                >
                   Download
                 </button>
               </div>
@@ -381,7 +385,10 @@ export default function DoctorDashboard({ onClose, onNavigate }: DoctorDashboard
                 <FileText className="0qca2lga w-8 h-8 text-blue-600 mb-4" />
                 <h4 className={`0tlbzgrw font-bold text-lg mb-2 ${darkMode ? 'text-white' : ''}`}>Monthly Report</h4>
                 <p className={`07b6ziii text-sm ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>Comprehensive monthly health analytics.</p>
-                <button className="0v17zhad mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg">
+                <button 
+                  onClick={() => generateMonthlyReport(mockPatients)}
+                  className="0v17zhad mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg"
+                >
                   Download
                 </button>
               </div>

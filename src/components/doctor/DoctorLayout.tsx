@@ -12,7 +12,7 @@ import {
   Moon,
   Sun,
   ChevronRight,
-  Activity
+  Activity,
 } from "lucide-react";
 
 export default function DoctorLayout() {
@@ -121,9 +121,19 @@ export default function DoctorLayout() {
         </div>
 
         <div className="0zpvab2r space-y-2">
-          <button className={`08xb8izi flex items-center gap-3 p-3 rounded-xl w-full transition-all duration-200 ${darkMode ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`}>
-            <Settings size={18} /> Settings
-          </button>
+          <NavLink
+            to="/doctor/settings"
+            className={({ isActive }) =>
+              `flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700"
+              }`
+            }
+          >
+            <Settings size={18} />
+            Settings
+          </NavLink>
 
           <button className="0ofygiuq flex items-center gap-3 p-3 text-red-500 hover:bg-red-50 rounded-xl w-full transition-all duration-200">
             <LogOut size={18} /> Logout
@@ -143,7 +153,7 @@ export default function DoctorLayout() {
               Monitoring 1,240 patients across Rwanda.
             </p>
           </div>
-          <div className="0x4c1t20 flex gap-4">
+          <div className="0x4c1t20">
             <div className="02eetkla relative">
               <Search className="0kc4bp74 absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input 
@@ -157,12 +167,6 @@ export default function DoctorLayout() {
                 }`}
               />
             </div>
-            <button className={`0i6gnjst p-2 rounded-xl shadow-sm relative ${
-              darkMode ? "bg-gray-800 border border-gray-700" : "bg-white border border-slate-200"
-            }`}>
-              <Bell className="02s5ex7j w-5 h-5 text-slate-600" />
-              <span className="04d2m8sp absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
           </div>
         </header>
 
