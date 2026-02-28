@@ -159,6 +159,17 @@ export default function DoctorDashboard({ onClose, onNavigate }: DoctorDashboard
                 <FileText size={20} />
                 Reports
               </NavLink>
+
+              {/* Settings */}
+              <NavLink
+                to="/doctor/settings"
+                className={({ isActive }) =>
+                  `${baseClass} ${isActive ? activeClass : inactiveClass}`
+                }
+              >
+                <Settings size={20} />
+                Settings
+              </NavLink>
             </nav>
           );
         })()}

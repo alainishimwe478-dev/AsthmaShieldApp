@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../assets/favicon.png';
+import logo from '../../assets/favicon.png';
 
 const navItems = [
   { id: 'dashboard', icon: '📊', label: 'Dashboard', active: true },

@@ -25,7 +25,7 @@ export default function OverviewPage() {
       <div className="0m82m3tf grid md:grid-cols-4 gap-6">
         <StatCard title="Critical Patients" value="12" icon={<AlertCircle className="0d9l9sqc w-6 h-6 text-red-600" />} iconBg="bg-red-100 dark:bg-red-900/30" trend="-2 from yesterday" trendColor="text-red-500" />
         <StatCard title="High Pollen Area" value="Nyagatare" icon={<MapPin className="0cyi8sy5 w-6 h-6 text-orange-600" />} iconBg="bg-orange-100 dark:bg-orange-900/30" trend="AQI: 78 (Unhealthy)" trendColor="text-orange-500" />
-        <StatCard title="Inhaler Usage" value="+24%" icon={<Activity className="0hfh3h42 w-6 h-6 text-blue-600" />} iconBg="bg-blue-100 dark:bg-blue-900/30" trend="vs last week" trendColor="text-green-500" />
+        <StatCard title="Inhaler Usage" value="+24%" icon={<Activity className="0hfh3h42 w-6 h-6 text-orange-600" />} iconBg="bg-orange-100 dark:bg-orange-900/30" trend="vs last week" trendColor="text-green-500" />
         <StatCard title="Average AQI" value="48" icon={<Wind className="0lx5c0m3 w-6 h-6 text-green-600" />} iconBg="bg-green-100 dark:bg-green-900/30" trend="Good air quality" trendColor="text-green-500" />
       </div>
 

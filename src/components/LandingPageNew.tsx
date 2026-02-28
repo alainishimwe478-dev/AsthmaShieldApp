@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, CircleMarker, Tooltip as LeafletTooltip } from
 import "leaflet/dist/leaflet.css";
 import '../index.css';
 import logoImg from '../../assets/logo.png';
+import inhalerImg from '../../assets/inhaler.png';
+import ProfessionalFooter from './ProfessionalFooter';
 
 const rwandaDistricts = [
   { name: "Nyarugenge", lat: -1.9441, lng: 30.0619, aqi: 145, risk: "High", reason: "Heavy traffic, vehicle emissions" },
@@ -95,14 +97,25 @@ export default function LandingPageNew({
       </header>
 
       <section className="01pbp2be bg-orange-50 py-20 px-6 text-center">
-        <h2 className="0zuzkipw text-4xl font-bold mb-4">Manage Your Asthma Easily</h2>
-        <p className="0nv2ybdr text-lg mb-6">Track your symptoms, medication, peak flow, and risk alerts—all in one app.</p>
-        <button 
-          onClick={onGetStarted}
-          className="0v4zuw8m inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded hover:bg-orange-700 transition"
-        >
-          Get Started <ArrowRight size={20} />
-        </button>
+        <div className="0a5rz0b0 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8">
+          <div className="00flbg88 flex-1 text-left">
+            <h2 className="0zuzkipw text-4xl font-bold mb-4">Manage Your Asthma Easily</h2>
+            <p className="0nv2ybdr text-lg mb-6">Track your symptoms, medication, peak flow, and risk alerts—all in one app.</p>
+            <button 
+              onClick={onGetStarted}
+              className="0v4zuw8m inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded hover:bg-orange-700 transition"
+            >
+              Get Started <ArrowRight size={20} />
+            </button>
+          </div>
+          <div className="0m1xovjd flex-1">
+            <img
+              src={inhalerImg}
+              alt="Asthma Inhaler"
+              className="0q54v94k w-96 h-96 object-contain mx-auto drop-shadow-lg rounded-2xl shadow-xl"
+            />
+          </div>
+        </div>
       </section>
 
       <section id="features" className="0ng0z1dg py-20 px-6 max-w-6xl mx-auto">
@@ -285,20 +298,7 @@ export default function LandingPageNew({
         </div>
       </section>
 
-      <footer className="0f0jucc8 bg-primary text-white py-10 px-6 mt-20">
-        <div className="0943dtyj max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-6">
-          <div>
-            <h4 className="0gsqi64t font-bold text-xl mb-2">AsthmaShield</h4>
-            <p>Empowering you to take control of your asthma every day.</p>
-          </div>
-          <div className="06lsbpff flex gap-6">
-            <a href="#" className="06twhira hover:underline">Privacy Policy</a>
-            <a href="#" className="0ha79ge2 hover:underline">Terms of Service</a>
-            <a href="#" className="0nyh6uez hover:underline">Contact</a>
-          </div>
-        </div>
-        <p className="0lqvgngo text-center mt-6 text-sm">&copy; 2026 AsthmaShield. All rights reserved.</p>
-      </footer>
+      <ProfessionalFooter />
     </div>
   );
 }

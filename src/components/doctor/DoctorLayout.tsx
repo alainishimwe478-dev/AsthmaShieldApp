@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 export default function DoctorLayout() {
+  const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -30,6 +31,11 @@ export default function DoctorLayout() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('rwanda_guard_user');
+    navigate('/');
+  };
+
   const baseClass =
     "flex items-center gap-3 p-3 rounded-xl transition-all duration-200";
   const activeClass = "bg-blue-600 text-white shadow-md";
@@ -42,8 +48,8 @@ export default function DoctorLayout() {
       <aside className={`0lfmgmqq w-64 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-slate-200"} border-r p-6 flex flex-col justify-between transition-colors duration-300`}>
         <div>
           <div className="0h6y3yv5 flex items-center gap-2 mb-8">
-            <div className="0durf0rj bg-blue-600 p-2 rounded-lg">
-              <Activity className="0m0b9g0y text-white w-6 h-6" />
+            <div className="0durf0rj bg-blue-600 p-4 rounded-lg">
+              <Activity className="0m0b9g0y text-white w-16 h-16 font-black" />
             </div>
             <h1 className={`0nohcbkb text-xl font-black tracking-tight ${darkMode ? "text-white" : "text-slate-800"}`}>
               Doctor Panel
@@ -135,7 +141,10 @@ export default function DoctorLayout() {
             Settings
           </NavLink>
 
-          <button className="0ofygiuq flex items-center gap-3 p-3 text-red-500 hover:bg-red-50 rounded-xl w-full transition-all duration-200">
+          <button 
+            onClick={handleLogout}
+            className="0ofygiuq flex items-center gap-3 p-3 text-red-500 hover:bg-red-50 rounded-xl w-full transition-all duration-200"
+          >
             <LogOut size={18} /> Logout
           </button>
         </div>

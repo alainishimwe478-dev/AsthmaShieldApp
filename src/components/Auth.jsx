@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logoImg from '../../assets/logo.png';
 
 export default function Auth({ onAuthComplete }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,9 +34,11 @@ export default function Auth({ onAuthComplete }) {
     try {
       if (isLogin) {
         // Login logic - separate for patient and doctor
-        const usersData = localStorage.getItem(userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users");
+        const usersData = localStorage.getItem(
+          userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users",
+        );
         const users = usersData ? JSON.parse(usersData) : [];
-        
+
         const user = users.find(
           (u) => u.email === email && u.password === password,
         );
@@ -57,7 +60,9 @@ export default function Auth({ onAuthComplete }) {
           localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
           handleAuthSuccess(userData);
         } else {
-          alert(`Invalid ${userType} credentials. Please check your email and password.`);
+          alert(
+            `Invalid ${userType} credentials. Please check your email and password.`,
+          );
         }
       } else {
         // Register logic
@@ -67,7 +72,8 @@ export default function Auth({ onAuthComplete }) {
           return;
         }
 
-        const storageKey = userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
+        const storageKey =
+          userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
         const usersData = localStorage.getItem(storageKey);
         const users = usersData ? JSON.parse(usersData) : [];
 
@@ -132,13 +138,15 @@ export default function Auth({ onAuthComplete }) {
 
   // Quick login for demo accounts
   const handleQuickLogin = (type) => {
-    const storageKey = type === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
+    const storageKey =
+      type === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
     const usersData = localStorage.getItem(storageKey);
     const users = usersData ? JSON.parse(usersData) : [];
-    
-    const demoEmail = type === "doctor" ? "doctor@asthma-shield.rw" : "demo@asthma-shield.rw";
+
+    const demoEmail =
+      type === "doctor" ? "doctor@asthma-shield.rw" : "demo@asthma-shield.rw";
     const demoUser = users.find((u) => u.email === demoEmail);
-    
+
     if (demoUser) {
       const userData = {
         id: demoUser.id,
@@ -161,20 +169,8 @@ export default function Auth({ onAuthComplete }) {
       <div className="0vwsr2w2 w-full max-w-md">
         {/* Logo */}
         <div className="0h4qv4m3 text-center mb-8">
-          <div className="0j3b4w5x inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-3xl mb-4">
-            <svg
-              className="0qmc8r6s w-8 h-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-              />
-            </svg>
+          <div className="0j3b4w5x inline-flex items-center justify-center mb-4">
+            <img src={logoImg} alt="AsthmaShield Logo" className="0a9eaxjr w-20 h-20" />
           </div>
           <h1 className="0xkfj7w9 text-3xl font-black text-white tracking-tight">
             {userType === "doctor" ? "Dr. Panel" : "AsthmaShield"}
@@ -193,7 +189,7 @@ export default function Auth({ onAuthComplete }) {
             onClick={() => setUserType("patient")}
             className={`0k5atgbn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
               userType === "patient"
-                ? "bg-blue-600 text-white shadow-lg"
+                ? "bg-orange-600 text-white shadow-lg"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -224,7 +220,7 @@ export default function Auth({ onAuthComplete }) {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
                   placeholder="Enter your full name"
                   required
                 />
@@ -238,7 +234,7 @@ export default function Auth({ onAuthComplete }) {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                  className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
                   placeholder="+250 789 123 456"
                 />
               </div>
@@ -252,7 +248,7 @@ export default function Auth({ onAuthComplete }) {
                     type="date"
                     value={dateOfBirth}
                     onChange={(e) => setDateOfBirth(e.target.value)}
-                    className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                    className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
                   />
                 </div>
               )}
@@ -287,7 +283,9 @@ export default function Auth({ onAuthComplete }) {
                       <option value="">Select specialization</option>
                       <option value="pulmonologist">Pulmonologist</option>
                       <option value="allergist">Allergist</option>
-                      <option value="general_practitioner">General Practitioner</option>
+                      <option value="general_practitioner">
+                        General Practitioner
+                      </option>
                       <option value="pediatrician">Pediatrician</option>
                       <option value="other">Other</option>
                     </select>
@@ -311,7 +309,7 @@ export default function Auth({ onAuthComplete }) {
                         type="text"
                         value={emergencyName}
                         onChange={(e) => setEmergencyName(e.target.value)}
-                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
                         placeholder="Emergency contact name"
                       />
                     </div>
@@ -324,7 +322,7 @@ export default function Auth({ onAuthComplete }) {
                         type="tel"
                         value={emergencyPhone}
                         onChange={(e) => setEmergencyPhone(e.target.value)}
-                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
                         placeholder="+250 789 123 456"
                       />
                     </div>
@@ -335,8 +333,10 @@ export default function Auth({ onAuthComplete }) {
                       </label>
                       <select
                         value={emergencyRelationship}
-                        onChange={(e) => setEmergencyRelationship(e.target.value)}
-                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+                        onChange={(e) =>
+                          setEmergencyRelationship(e.target.value)
+                        }
+                        className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
                       >
                         <option value="">Select relationship</option>
                         <option value="parent">Parent</option>
@@ -361,7 +361,7 @@ export default function Auth({ onAuthComplete }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+              className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
               placeholder="Enter your email"
             />
           </div>
@@ -374,7 +374,7 @@ export default function Auth({ onAuthComplete }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-blue-500 transition"
+              className="0r2h5t7j w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-medium focus:outline-none focus:border-orange-500 transition"
               placeholder="Enter your password"
             />
           </div>
@@ -382,7 +382,7 @@ export default function Auth({ onAuthComplete }) {
           <button
             type="submit"
             className={`0cvhwyxl w-full text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95 disabled:opacity-50 ${
-              userType === "doctor" ? "bg-emerald-600" : "bg-blue-600"
+              userType === "doctor" ? "bg-emerald-600" : "bg-orange-600"
             }`}
           >
             {loading
@@ -405,7 +405,9 @@ export default function Auth({ onAuthComplete }) {
               <div className="0bt1j5q1 0demo-info text-xs text-slate-300 space-y-1">
                 <p>
                   <span className="0k3pxvag text-slate-500">Email:</span>{" "}
-                  {userType === "doctor" ? "doctor@asthma-shield.rw" : "demo@asthma-shield.rw"}
+                  {userType === "doctor"
+                    ? "doctor@asthma-shield.rw"
+                    : "demo@asthma-shield.rw"}
                 </p>
                 <p>
                   <span className="0ycvqd8u text-slate-500">Password:</span>{" "}
@@ -420,10 +422,12 @@ export default function Auth({ onAuthComplete }) {
               type="button"
               onClick={() => handleQuickLogin(userType)}
               className={`0cvhwyxl w-full mt-3 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95 ${
-                userType === "doctor" ? "bg-emerald-600" : "bg-blue-600"
+                userType === "doctor" ? "bg-emerald-600" : "bg-orange-600"
               }`}
             >
-              {userType === "doctor" ? "🚀 LOGIN AS DEMO DOCTOR" : "TRY DEMO ACCOUNT"}
+              {userType === "doctor"
+                ? "🚀 LOGIN AS DEMO DOCTOR"
+                : "TRY DEMO ACCOUNT"}
             </button>
           )}
         </form>
@@ -435,7 +439,7 @@ export default function Auth({ onAuthComplete }) {
           </span>
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="08atrqn7 text-blue-600 font-black hover:text-blue-700"
+            className="08atrqn7 text-orange-600 font-black hover:text-orange-700"
           >
             {isLogin ? "Join Now" : "Sign In"}
           </button>

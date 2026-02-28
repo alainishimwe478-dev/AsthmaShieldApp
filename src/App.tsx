@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { AppStatus, EnvironmentalData, User } from './types';
 import { getEnvironmentalData } from './services/geminiService';
 import EnvironmentalDashboard from './components/EnvironmentalDashboard';
-import { DoctorLive } from './components/DoctorLive';
+// DoctorLive removed - unused import
 import Auth from './components/Auth';
 import LandingPage from './components/LandingPageNew';
 import DoctorLayout from './components/doctor/DoctorLayout';
@@ -13,13 +13,21 @@ import AlertsPage from './components/doctor/AlertsPage';
 import ReportsPage from './components/doctor/ReportsPage';
 import ConsultationPage from './components/ConsultationPage';
 import DoctorSettings from './components/DoctorSettings';
+import PatientDashboard from './components/PatientDashboard';
+import PatientDashboardHome from './components/patient/PatientDashboardHome';
+import PatientHealthPage from './components/patient/PatientHealthPage';
+import PatientMedicationsPage from './components/patient/PatientMedicationsPage';
+import PatientLogsPage from './components/patient/PatientLogsPage';
+import PatientAppointmentsPage from './components/patient/PatientAppointmentsPage';
+import PatientProfilePage from './components/patient/PatientProfilePage';
+import PatientSettingsPage from './components/patient/PatientSettingsPage';
 
 // Inner component that has access to useNavigate hook
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState<AppStatus>(AppStatus.IDLE);
   const [data, setData] = useState<EnvironmentalData | null>(null);
-  const [isConsulting, setIsConsulting] = useState(false);
+const [_isConsulting, setIsConsulting] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [initialized, setInitialized] = useState(false);
   
@@ -201,113 +209,67 @@ const AppContent: React.FC = () => {
 
   // Wrap everything in BrowserRouter for React Router navigation
   return (
-    <div className="0vyw31hs min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900 animate-in fade-in duration-700">
-        <nav className="0hyd617v p-4 md:p-6 max-w-5xl mx-auto flex justify-between items-center bg-white/50 backdrop-blur-sm sticky top-0 z-40 border-b border-slate-100 mb-4 rounded-b-3xl">
-          <div className="06663l34 flex items-center gap-3 group cursor-pointer" onClick={() => setView('home')}>
-            <div className="0zficq1n w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
-              <svg className="0pql8lkh w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M13 7H7v6h6V7z"/>
-                <path fillRule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 010-2h1V9a2 2 0 012-2h2V2zM5 5h10v10H5V5z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="0hz15zi0 flex flex-col">
-              <span className="0qup4e57 font-black text-lg tracking-tighter uppercase italic text-blue-600 leading-none">Shield</span>
-              <span className="0vffuw2e text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Health Console</span>
-            </div>
-          </div>
-          
-          <div className="0je84x9r flex items-center gap-4">
-            <button onClick={() => setView('home')} className="0nzb7rpv hidden sm:block text-sm font-semibold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors">
-              Home
-            </button>
-            
-            {user.isDoctor && (
-              <button onClick={() => setView('doctor')} className="0l0w4xha hidden sm:block text-sm font-semibold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors">
-                Doctor Panel
-              </button>
-            )}
-            
-            {!user.isDoctor && (
-              <button onClick={() => setView('dashboard')} className="0esy042u hidden sm:block text-sm font-semibold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors">
-                My Dashboard
-              </button>
-            )}
-            
-            <div className="06zd4dv6 hidden sm:flex flex-col items-end mr-2">
-              <span className="09mr3c45 text-xs font-semibold text-slate-300 uppercase tracking-widest leading-none">
-                {user.isDoctor ? 'Doctor' : 'Patient'}
-              </span>
-              <span className="0fk7e3zj text-sm font-bold text-slate-800">{user.fullName}</span>
-            </div>
-            
-            <div className="0smzozee relative group">
-              <img 
-                src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} 
-                alt="Avatar" 
-                className="0zpk8sd9 w-10 h-10 rounded-xl bg-blue-100 border-2 border-white shadow-sm transition-transform group-hover:scale-105"
-              />
-              <div className="0d4h2avm absolute top-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
-            </div>
-            
-            <button 
-              onClick={handleLogout}
-              className="0tcyyf5i w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-rose-50 hover:text-rose-600 transition-all active:scale-90"
-              title="Log Out"
-            >
-              <svg className="0wwps0gq w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-            </button>
-          </div>
-        </nav>
-
-        <main className="0qizfq2y pb-20">
-          {/* Patient Dashboard - only show for non-doctors */}
-          {view === 'dashboard' && !user.isDoctor && (
-            <EnvironmentalDashboard 
-              data={data} 
-              status={status} 
-              onRefresh={fetchData} 
-              onConsult={() => setIsConsulting(true)} 
+    <Routes>
+      <Route path="/" element={
+        <LandingPage
+          onGetStarted={() => navigate('/auth')}
+          onLogin={() => navigate('/auth')}
+        />
+      } />
+      <Route path="/auth" element={
+        <Auth onAuthComplete={(u: User) => {
+          setUser(u);
+          if (u.isDoctor) {
+            navigate('/doctor/overview');
+          } else {
+            navigate('/patient-dashboard');
+          }
+        }} />
+      } />
+      <Route path="/dashboard" element={
+        user && !user.isDoctor ? (
+          <PatientDashboard>
+            <EnvironmentalDashboard
+              data={data}
+              status={status}
+              onRefresh={fetchData}
+              onConsult={() => setIsConsulting(true)}
             />
-          )}
-
-          {/* Doctor Dashboard - rendered via React Router for all /doctor/* routes */}
-          {(view === 'doctor' || (view !== 'home' && view !== 'auth' && user?.isDoctor)) && (
-            <Routes>
-              <Route path="/doctor" element={<DoctorLayout />}>
-                <Route index element={<Navigate to="/doctor/overview" replace />} />
-                <Route path="overview" element={<OverviewPage />} />
-                <Route path="patients" element={<PatientsPage />} />
-                <Route path="alerts" element={<AlertsPage />} />
-                <Route path="consultations" element={<ConsultationPage />} />
-                <Route path="reports" element={<ReportsPage />} />
-                <Route path="settings" element={<DoctorSettings />} />
-                {/* Fallback for doctor sub-routes - redirect to overview */}
-                <Route path="*" element={<Navigate to="/doctor/overview" replace />} />
-              </Route>
-            </Routes>
-          )}
-        </main>
-
-        {isConsulting && data && (
-          <DoctorLive 
-            envSummary={data.summary} 
-            onClose={() => setIsConsulting(false)} 
-          />
-        )}
-
-        {status === AppStatus.ERROR && (
-          <div className="0ljwclcr fixed bottom-8 left-1/2 -translate-x-1/2 bg-rose-600 text-white px-8 py-4 rounded-3xl shadow-2xl font-black text-xs uppercase tracking-widest animate-in slide-in-from-bottom-10 z-50">
-            <div className="0nhzz6gc flex items-center gap-3">
-              <svg className="0mggqlub w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              Feed Sync Failed. <button onClick={fetchData} className="0x9ldtz0 underline ml-1">Retry Sync</button>
-            </div>
-          </div>
-        )}
-    </div>
+          </PatientDashboard>
+        ) : <Navigate to="/auth" replace />
+      } />
+      <Route path="/doctor/*" element={
+        user && user.isDoctor ? (
+          <Routes>
+            <Route path="/" element={<DoctorLayout />}>
+              <Route index element={<Navigate to="/doctor/overview" replace />} />
+              <Route path="overview" element={<OverviewPage />} />
+              <Route path="patients" element={<PatientsPage />} />
+              <Route path="alerts" element={<AlertsPage />} />
+              <Route path="consultations" element={<ConsultationPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+              <Route path="settings" element={<DoctorSettings />} />
+              <Route path="*" element={<Navigate to="/doctor/overview" replace />} />
+            </Route>
+          </Routes>
+        ) : <Navigate to="/auth" replace />
+      } />
+      <Route path="/patient-dashboard" element={
+        user && !user.isDoctor ? (
+          <PatientDashboard />
+        ) : <Navigate to="/auth" replace />
+      } >
+        <Route index element={<PatientDashboardHome />} />
+        <Route path="health" element={<PatientHealthPage />} />
+        <Route path="medications" element={<PatientMedicationsPage />} />
+        <Route path="logs" element={<PatientLogsPage />} />
+        <Route path="appointments" element={<PatientAppointmentsPage />} />
+        <Route path="profile" element={<PatientProfilePage />} />
+        <Route path="settings" element={<PatientSettingsPage />} />
+        <Route path="*" element={<PatientDashboardHome />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 
