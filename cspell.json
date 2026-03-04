@@ -1,6 +1,6 @@
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en,fr,rw",
   "words": [
     "Salbutamol",
     "Seretide",
@@ -22,14 +22,40 @@
     "Rubavu",
     "Kigali",
     "Rwanda",
-    "asthmashield"
+    "asthmashield",
+    "Kinyarwanda",
+    "CHUK",
+    "Nyarugenge",
+    "Gasabo",
+    "Butare",
+    "Ruhengeri",
+    "Gisenyi",
+    "Kibungo",
+    "Ngoma",
+    "Muhanga",
+    "Rwamagana",
+    "Kabgayi",
+    "patient",
+    "hospital",
+    "hospitals",
+    "action",
+    "daily",
+    "record",
+    "records",
+    "Kicukiro",
+    "Bugesera",
+    "Français",
+    "languagedetector",
+    "mipv",
+    "oboy"
   ],
   "ignoreRegExpList": [
-    "/className=\"0[a-z0-9]+\\s[a-zA-Z]/g"
+    "/className=\"[^\"]+\"/g"
   ],
   "ignorePaths": [
     "node_modules/**",
     "*.min.css",
-    "*.min.js"
+    "*.min.js",
+    "src/i18n/*.json"
   ]
 }

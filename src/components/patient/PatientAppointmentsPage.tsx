@@ -1,8 +1,10 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
-import { Calendar, Clock, MapPin, Video } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Calendar, Clock, Video } from "lucide-react";
 
 export default function PatientAppointmentsPage() {
+  const { t } = useTranslation();
   const { darkMode } = useOutletContext<{ darkMode: boolean }>();
 
   const appointments = [
@@ -26,11 +28,11 @@ export default function PatientAppointmentsPage() {
 
   return (
     <div className="0mglr2uq space-y-6">
-      <h2 className="05xzp9gn text-2xl font-black">Appointments</h2>
+      <h2 className="05xzp9gn text-2xl font-black">{t("appointments")}</h2>
 
       {/* Upcoming Appointments */}
       <div className={`0kxy3ozo p-6 rounded-3xl ${darkMode ? "bg-gray-800" : "bg-white"} shadow-lg`}>
-        <h3 className="0m6esa7h text-xl font-black mb-4">Upcoming Appointments</h3>
+        <h3 className="0m6esa7h text-xl font-black mb-4">{t("upcoming_appointments")}</h3>
         <div className="0ipwkdao space-y-4">
           {appointments.filter(a => a.status === "Upcoming").map((apt, idx) => (
             <div key={idx} className="08bg9kcb p-4 bg-blue-50 rounded-xl">
@@ -44,7 +46,7 @@ export default function PatientAppointmentsPage() {
               <div className="0bbg55cv flex flex-wrap gap-4 text-sm text-slate-500">
                 <span className="06zg507d flex items-center gap-1"><Calendar size={14} /> {apt.date}</span>
                 <span className="02x1q4p0 flex items-center gap-1"><Clock size={14} /> {apt.time}</span>
-                <span className="0i1exu4s flex items-center gap-1"><Video size={14} /> {apt.type}</span>
+                <span className="0i1exu4s flex items-center gap-1"><Video size={14} /> {apt.type === "Video Consultation" ? t("video_consultation") : t("in_person")}</span>
               </div>
             </div>
           ))}
@@ -53,7 +55,7 @@ export default function PatientAppointmentsPage() {
 
       {/* Past Appointments */}
       <div className={`0kkt4wx0 p-6 rounded-3xl ${darkMode ? "bg-gray-800" : "bg-white"} shadow-lg`}>
-        <h3 className="0f3e2cx2 text-xl font-black mb-4">Past Appointments</h3>
+        <h3 className="0f3e2cx2 text-xl font-black mb-4">{t("past_appointments")}</h3>
         <div className="0xlanfuk space-y-4">
           {appointments.filter(a => a.status === "Completed").map((apt, idx) => (
             <div key={idx} className="043lai1w p-4 bg-slate-50 rounded-xl">
@@ -75,7 +77,7 @@ export default function PatientAppointmentsPage() {
 
       {/* Book New Appointment */}
       <button className="0qdx1c6a w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition">
-        + Book New Appointment
+        {t("book_new_appointment")}
       </button>
     </div>
   );

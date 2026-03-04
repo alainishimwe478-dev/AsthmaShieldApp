@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import logoImg from '../../assets/logo.png';
+import React, { useState, useEffect } from "react";
+import logoImg from "../../assets/logo.png";
 
 export default function Auth({ onAuthComplete }) {
   const [isLogin, setIsLogin] = useState(true);
-  const [userType, setUserType] = useState("patient");
+  const [userType, setUserType] = useState("patient"); // patient, doctor, admin
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -19,6 +19,30 @@ export default function Auth({ onAuthComplete }) {
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
 
+  // Initialize admin user on mount
+  useEffect(() => {
+    const adminsData = localStorage.getItem("rwanda_guard_admins");
+    const admins = adminsData ? JSON.parse(adminsData) : [];
+
+    const adminEmail = "admin@asthma-shield.rw";
+    let adminUser = admins.find((u) => u.email === adminEmail);
+
+    if (!adminUser) {
+      adminUser = {
+        id: "admin-001",
+        email: adminEmail,
+        password: "admin123",
+        fullName: "System Admin",
+        phone: "+250 789 000 000",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=admin",
+        createdAt: Date.now(),
+        role: "admin",
+      };
+      admins.push(adminUser);
+      localStorage.setItem("rwanda_guard_admins", JSON.stringify(admins));
+    }
+  }, []);
+
   const handleAuthSuccess = (userData) => {
     setRedirecting(true);
     // Small delay for smooth UI transition
@@ -33,10 +57,12 @@ export default function Auth({ onAuthComplete }) {
 
     try {
       if (isLogin) {
-        // Login logic - separate for patient and doctor
-        const usersData = localStorage.getItem(
-          userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users",
-        );
+        // Login logic - separate for patient, doctor, and admin
+        let storageKey = "rwanda_guard_users";
+        if (userType === "doctor") storageKey = "rwanda_guard_doctors";
+        if (userType === "admin") storageKey = "rwanda_guard_admins";
+
+        const usersData = localStorage.getItem(storageKey);
         const users = usersData ? JSON.parse(usersData) : [];
 
         const user = users.find(
@@ -54,6 +80,8 @@ export default function Auth({ onAuthComplete }) {
             avatar: user.avatar,
             createdAt: user.createdAt,
             isDoctor: userType === "doctor",
+            isAdmin: userType === "admin",
+            role: userType,
             licenseNumber: user.licenseNumber,
             specialization: user.specialization,
           };
@@ -72,8 +100,10 @@ export default function Auth({ onAuthComplete }) {
           return;
         }
 
-        const storageKey =
-          userType === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
+        let storageKey = "rwanda_guard_users";
+        if (userType === "doctor") storageKey = "rwanda_guard_doctors";
+        if (userType === "admin") storageKey = "rwanda_guard_admins";
+
         const usersData = localStorage.getItem(storageKey);
         const users = usersData ? JSON.parse(usersData) : [];
 
@@ -101,6 +131,7 @@ export default function Auth({ onAuthComplete }) {
               : undefined,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
           createdAt: Date.now(),
+          role: userType, // 'patient', 'doctor', or 'admin'
           // Doctor specific fields
           ...(userType === "doctor" && {
             licenseNumber,
@@ -121,6 +152,8 @@ export default function Auth({ onAuthComplete }) {
           avatar: newUser.avatar,
           createdAt: newUser.createdAt,
           isDoctor: userType === "doctor",
+          isAdmin: userType === "admin",
+          role: userType,
           licenseNumber: newUser.licenseNumber,
           specialization: newUser.specialization,
         };
@@ -138,13 +171,17 @@ export default function Auth({ onAuthComplete }) {
 
   // Quick login for demo accounts
   const handleQuickLogin = (type) => {
-    const storageKey =
-      type === "doctor" ? "rwanda_guard_doctors" : "rwanda_guard_users";
+    let storageKey = "rwanda_guard_users";
+    if (type === "doctor") storageKey = "rwanda_guard_doctors";
+    if (type === "admin") storageKey = "rwanda_guard_admins";
+
     const usersData = localStorage.getItem(storageKey);
     const users = usersData ? JSON.parse(usersData) : [];
 
-    const demoEmail =
-      type === "doctor" ? "doctor@asthma-shield.rw" : "demo@asthma-shield.rw";
+    let demoEmail = "demo@asthma-shield.rw";
+    if (type === "doctor") demoEmail = "doctor@asthma-shield.rw";
+    if (type === "admin") demoEmail = "admin@asthma-shield.rw";
+
     const demoUser = users.find((u) => u.email === demoEmail);
 
     if (demoUser) {
@@ -156,11 +193,17 @@ export default function Auth({ onAuthComplete }) {
         avatar: demoUser.avatar,
         createdAt: demoUser.createdAt,
         isDoctor: type === "doctor",
+        isAdmin: type === "admin",
+        role: type,
         licenseNumber: demoUser.licenseNumber,
         specialization: demoUser.specialization,
       };
       localStorage.setItem("rwanda_guard_user", JSON.stringify(userData));
       handleAuthSuccess(userData);
+    } else {
+      alert(
+        `No demo ${type} account found. Please register or create one manually.`,
+      );
     }
   };
 
@@ -170,10 +213,18 @@ export default function Auth({ onAuthComplete }) {
         {/* Logo */}
         <div className="0h4qv4m3 text-center mb-8">
           <div className="0j3b4w5x inline-flex items-center justify-center mb-4">
-            <img src={logoImg} alt="AsthmaShield Logo" className="0a9eaxjr w-20 h-20" />
+            <img
+              src={logoImg}
+              alt="AsthmaShield Logo"
+              className="0a9eaxjr w-20 h-20"
+            />
           </div>
           <h1 className="0xkfj7w9 text-3xl font-black text-white tracking-tight">
-            {userType === "doctor" ? "Dr. Panel" : "AsthmaShield"}
+            {userType === "doctor"
+              ? "Dr. Panel"
+              : userType === "admin"
+                ? "Admin Panel"
+                : "AsthmaShield"}
           </h1>
           <p className="0mcp5nqk text-slate-400 mt-2">
             {isLogin
@@ -205,6 +256,17 @@ export default function Auth({ onAuthComplete }) {
             }`}
           >
             🩺 Doctor
+          </button>
+          <button
+            type="button"
+            onClick={() => setUserType("admin")}
+            className={`0g0vo70g 0adminbtn flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all ${
+              userType === "admin"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            ⚡ Admin
           </button>
         </div>
 
@@ -382,36 +444,56 @@ export default function Auth({ onAuthComplete }) {
           <button
             type="submit"
             className={`0cvhwyxl w-full text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95 disabled:opacity-50 ${
-              userType === "doctor" ? "bg-emerald-600" : "bg-orange-600"
+              userType === "admin"
+                ? "bg-purple-600"
+                : userType === "doctor"
+                  ? "bg-emerald-600"
+                  : "bg-orange-600"
             }`}
           >
             {loading
               ? "Please wait..."
               : isLogin
-                ? userType === "doctor"
-                  ? "LOGIN AS DOCTOR"
-                  : "SIGN IN"
-                : userType === "doctor"
-                  ? "REGISTER AS DOCTOR"
-                  : "CREATE ACCOUNT"}
+                ? userType === "admin"
+                  ? "LOGIN AS ADMIN"
+                  : userType === "doctor"
+                    ? "LOGIN AS DOCTOR"
+                    : "SIGN IN"
+                : userType === "admin"
+                  ? "REGISTER AS ADMIN"
+                  : userType === "doctor"
+                    ? "REGISTER AS DOCTOR"
+                    : "CREATE ACCOUNT"}
           </button>
 
           {/* Demo Credentials Info */}
           {isLogin && (
             <div className="0cazlui4 0demo-creds mt-4 p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
               <p className="0a2pw8by 0demo-title text-xs font-black text-slate-400 uppercase tracking-wider mb-2">
-                Demo {userType === "doctor" ? "Doctor" : "Patient"} Credentials
+                Demo{" "}
+                {userType === "admin"
+                  ? "Admin"
+                  : userType === "doctor"
+                    ? "Doctor"
+                    : "Patient"}{" "}
+                Credentials
               </p>
               <div className="0bt1j5q1 0demo-info text-xs text-slate-300 space-y-1">
                 <p>
                   <span className="0k3pxvag text-slate-500">Email:</span>{" "}
-                  {userType === "doctor"
-                    ? "doctor@asthma-shield.rw"
-                    : "demo@asthma-shield.rw"}
+                  {userType === "admin"
+                    ? "admin@asthma-shield.rw"
+                    : userType === "doctor"
+                      ? "doctor@asthma-shield.rw"
+                      : "demo@asthma-shield.rw"}
                 </p>
                 <p>
                   <span className="0ycvqd8u text-slate-500">Password:</span>{" "}
-                  {userType === "doctor" ? "doctor123" : "demo123"}
+                  {userType === "admin"
+                    ? "admin123"
+                    : userType === "doctor"
+                      ? "doctor123"
+                      : "demo123"}
                 </p>
               </div>
             </div>
@@ -422,12 +504,18 @@ export default function Auth({ onAuthComplete }) {
               type="button"
               onClick={() => handleQuickLogin(userType)}
               className={`0cvhwyxl w-full mt-3 text-white rounded-2xl px-5 py-4 text-xs font-black tracking-widest hover:opacity-90 transition-all shadow-lg active:scale-95 ${
-                userType === "doctor" ? "bg-emerald-600" : "bg-orange-600"
+                userType === "admin"
+                  ? "bg-purple-600"
+                  : userType === "doctor"
+                    ? "bg-emerald-600"
+                    : "bg-orange-600"
               }`}
             >
-              {userType === "doctor"
-                ? "🚀 LOGIN AS DEMO DOCTOR"
-                : "TRY DEMO ACCOUNT"}
+              {userType === "admin"
+                ? "🚀 LOGIN AS DEMO ADMIN"
+                : userType === "doctor"
+                  ? "🚀 LOGIN AS DEMO DOCTOR"
+                  : "TRY DEMO ACCOUNT"}
             </button>
           )}
         </form>

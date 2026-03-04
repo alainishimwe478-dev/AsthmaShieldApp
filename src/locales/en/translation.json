@@ -1,0 +1,161 @@
+{
+  "common": {
+    "appName": "Asthma Shield"
+  },
+  "language": {
+    "select": "Language",
+    "english": "English",
+    "french": "Français",
+    "kinyarwanda": "Kinyarwanda"
+  },
+  "navbar": {
+    "lightMode": "☀️ Light",
+    "darkMode": "🌙 Dark",
+    "login": "Login",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "subtitle": "Monitor air quality, detect high-pollen districts, and receive real-time health alerts powered by environmental data and AI.",
+    "startMonitoring": "Start Monitoring",
+    "signIn": "Sign In"
+  },
+  "environment": {
+    "currentStatus": "Current District Status – {{district}}",
+    "aqi": "AQI Index",
+    "pollen": "Pollen Index",
+    "temperature": "Temperature",
+    "riskLevel": "Risk Level",
+    "avoidActivity": "Avoid Outdoor Activity"
+  },
+  "stats": {
+    "districtsCovered": "Districts Covered",
+    "activeUsers": "Active Users",
+    "monitoring": "Monitoring"
+  },
+  "prevention": {
+    "title": "Asthma Prevention Tips",
+    "subtitle": "Important steps to protect yourself and manage attacks effectively."
+  },
+  "tip": {
+    "breathe": {
+      "title": "Stay Calm & Breathe Slowly",
+      "description": "Sit upright, take slow deep breaths, and try to stay calm during an attack."
+    },
+    "inhaler": {
+      "title": "Use Your Inhaler",
+      "description": "Follow your prescribed inhaler routine. Take quick-relief medication as directed."
+    },
+    "avoid": {
+      "title": "Avoid Triggers",
+      "description": "Stay away from smoke, dust, pollen, or strong odors that can worsen symptoms."
+    },
+    "seekHelp": {
+      "title": "Seek Help if Needed",
+      "description": "Call your doctor or emergency services if symptoms persist or worsen."
+    }
+  },
+  "feature": {
+    "monitoring": "Real-time Monitoring - Track your breathing patterns and symptoms",
+    "aiRisk": "AI Risk Assessment - Get personalized risk predictions",
+    "alerts": "Environmental Alerts - Stay informed about air quality in your area"
+  },
+  "newsletter": {
+    "subscribed": "Subscribed {{email}} to AsthmaShield updates!"
+  },
+  "cta": {
+    "title": "Ready to Protect Your Health?",
+    "subtitle": "Join thousands of Rwandans already using AsthmaShield to monitor air quality and prevent asthma attacks.",
+    "getStarted": "Get Started Now",
+    "learnMore": "Learn More"
+  },
+  "footer": {
+    "brand": "🛡️ ASTHMA SHIELD",
+    "tagline": "Protecting Rwandan lungs with AI-powered environmental monitoring.",
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2024 Asthma Shield Rwanda. All rights reserved.",
+    "developedBy": "Developed with ❤️ for Rwanda"
+  },
+  "login": {
+    "title": "Login",
+    "patient": "Patient",
+    "admin": "Admin",
+    "email": "Email",
+    "password": "Password",
+    "loginAs": "Login as {{role}}",
+    "cancel": "Cancel",
+    "welcomeBack": "Welcome Back",
+    "subtitle": "Sign in to continue protecting your health",
+    "emailLabel": "EMAIL ADDRESS",
+    "emailPlaceholder": "your.email@example.com",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "SIGN IN",
+    "noAccount": "Don't have an account?",
+    "joinNow": "Join Now",
+    "errorFillAll": "Please fill all fields",
+    "errorInvalid": "Invalid credentials"
+  },
+  "register": {
+    "joinShield": "Join the Shield",
+    "subtitle": "Create your account to start protecting your health",
+    "nameLabel": "FULL NAME",
+    "namePlaceholder": "John Doe",
+    "emailLabel": "EMAIL ADDRESS",
+    "emailPlaceholder": "your.email@example.com",
+    "passwordLabel": "PASSWORD",
+    "passwordPlaceholder": "Minimum 6 characters",
+    "createAccount": "CREATE ACCOUNT",
+    "alreadyAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "errorFillAll": "Please fill all fields",
+    "errorPassword": "Password must be at least 6 characters",
+    "errorEmailExists": "Email already registered",
+    "success": "Registration successful!"
+  },
+  "landing": {
+    "liveMonitoring": "LIVE ENVIRONMENTAL MONITORING",
+    "title": "Protect Your Lungs,",
+    "titleGradient": "Breathe Rwanda.",
+    "subtitle": "Asthma Shield uses advanced AI and real-time climate data to protect you from respiratory risks across Rwanda.",
+    "joinShield": "JOIN THE SHIELD",
+    "signIn": "SIGN IN",
+    "kigaliSector": "KIGALI SECTOR",
+    "clearAir": "Clear Air Quality",
+    "temperature": "TEMPERATURE",
+    "aqiIndex": "AQI INDEX",
+    "aiMedicalGuard": "AI MEDICAL GUARD",
+    "onlineConsultations": "Online Consultations",
+    "featuresTitle": "Precision Protection",
+    "featuresSubtitle": "Built specifically for the Rwandan landscape, combining local climate data with global AI excellence.",
+    "climateTracking": "Climate Tracking",
+    "climateTrackingDesc": "Live temperature, humidity, and AQI updates from across all provinces in Rwanda.",
+    "aiDoctor": "AI Medical Doctor",
+    "aiDoctorDesc": "24/7 video and voice consultations with an AI doctor trained on respiratory health protocols.",
+    "riskAlerts": "Risk Alerts",
+    "riskAlertsDesc": "Intelligent notifications when air quality or pollen levels in your district reach risky levels.",
+    "footerBrand": "🛡️ ASTHMA SHIELD",
+    "footerText": "© 2024 Asthma Shield Rwanda"
+  },
+  "map": {
+    "title": "Rwanda Air Quality Map",
+    "subtitle": "View real-time air quality and pollen levels across all districts",
+    "selectDistrict": "Select a district to view details",
+    "loading": "Loading map data...",
+    "noData": "No data available for this district",
+    "airQuality": "Air Quality",
+    "pollenLevel": "Pollen Level",
+    "humidity": "Humidity",
+    "wind": "Wind Speed",
+    "good": "Good",
+    "moderate": "Moderate",
+    "unhealthy": "Unhealthy",
+    "veryUnhealthy": "Very Unhealthy",
+    "hazardous": "Hazardous"
+  }
+}

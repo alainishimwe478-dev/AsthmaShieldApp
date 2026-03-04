@@ -66,6 +66,8 @@ export interface User {
   dateOfBirth?: string;
   emergencyContact?: EmergencyContact;
   isDoctor?: boolean;
+  isAdmin?: boolean;
+  role?: string;
 }
 
 // Emergency Contact interface

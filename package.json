@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -19,12 +19,16 @@
     "expo": "~51.0.0",
     "expo-linear-gradient": "~13.0.2",
     "expo-status-bar": "~1.12.1",
+    "i18next": "^25.8.13",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "jspdf": "^4.2.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.575.0",
     "motion": "^12.34.3",
     "nativewind": "^4.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-i18next": "^16.5.4",
     "react-leaflet": "^4.2.1",
     "react-markdown": "^10.1.0",
     "react-native": "0.74.5",
@@ -33,6 +37,7 @@
     "react-native-screens": "^4.23.0",
     "react-native-web": "~0.19.10",
     "react-router-dom": "^7.13.1",
+    "react-simple-maps": "^3.0.0",
     "recharts": "^3.7.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^3.4.19"
@@ -41,6 +46,7 @@
     "@babel/core": "^7.20.0",
     "@types/leaflet": "^1.9.21",
     "@types/react": "~18.2.45",
+    "@types/react-simple-maps": "^3.0.6",
     "@vitejs/plugin-react": "^5.1.4",
     "@vitejs/plugin-react-swc": "^4.2.3",
     "autoprefixer": "^10.4.24",

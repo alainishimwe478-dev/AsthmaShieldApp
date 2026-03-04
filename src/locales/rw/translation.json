@@ -1,0 +1,161 @@
+{
+  "common": {
+    "appName": "Asthma Shield"
+  },
+  "language": {
+    "select": "Ururimi",
+    "english": "English",
+    "french": "Français",
+    "kinyarwanda": "Kinyarwanda"
+  },
+  "navbar": {
+    "lightMode": "☀️ Urumuri",
+    "darkMode": "🌙 Umukara",
+    "login": "Injira",
+    "getStarted": "Tangira"
+  },
+  "hero": {
+    "subtitle": "Kurikirana ubuziranenge bw'umwuka, menya uturere dufite pollen nyinshi, kandi ubone amatangazo y'ubuzima ako kanya akomoka ku makuru y'ibidukikije na AI.",
+    "startMonitoring": "Tangira gukurikirana",
+    "signIn": "Injira"
+  },
+  "environment": {
+    "currentStatus": "Imiterere y'Akarere – {{district}}",
+    "aqi": "Ikigereranyo cya AQI",
+    "pollen": "Ikigereranyo cya Pollen",
+    "temperature": "Ubushyuhe",
+    "riskLevel": "Urwego rw'Ikibazo",
+    "avoidActivity": "Irinde ibikorwa byo hanze"
+  },
+  "stats": {
+    "districtsCovered": "Akarere Kabonetse",
+    "activeUsers": "Abakoresha bakora",
+    "monitoring": "Gukurikirana"
+  },
+  "prevention": {
+    "title": "Inama zo kwirinda Asthma",
+    "subtitle": "Intambwe z'ingenzi zo kwirinda no gucunga neza ibibazo by'ubuhumekero."
+  },
+  "tip": {
+    "breathe": {
+      "title": "Guma utuje & Humeka buhoro",
+      "description": "Iteke wicaye neza, humeka buhoro kandi gerageza kuba utuje mu gihe cy'ikibazo."
+    },
+    "inhaler": {
+      "title": "Koresha Inhaler yawe",
+      "description": "Kurikirana uburyo bwawe bwo gukoresha inhaler. Fata imiti yihutirwa nk'uko bikwiye."
+    },
+    "avoid": {
+      "title": "Irinde Ibiteza Ibibazo",
+      "description": "Hagarara kure y'umwotsi, ivu, pollen cyangwa impumuro zikaze zishobora gukoma mu nkokora."
+    },
+    "seekHelp": {
+      "title": "Shaka Ubufasha Niba Bikenewe",
+      "description": "Hamamagara muganga cyangwa serivisi z'ubutabazi niba ibimenyetso bikomeje cyangwa byiyongera."
+    }
+  },
+  "feature": {
+    "monitoring": "Gukurikirana mu gihe nyacyo - Kurikirana uko uhumeka n'ibimenyetso byawe",
+    "aiRisk": "Isesengura ry'Ibibazo na AI - Baza ibyago byihariye kuri wowe",
+    "alerts": "Amatangazo y'Ibidukikije - Menya uko ubuziranenge bw'umwuka buhagaze aho utuye"
+  },
+  "newsletter": {
+    "subscribed": "Wiyandikishije {{email}} mu makuru mashya ya AsthmaShield!"
+  },
+  "cta": {
+    "title": "Witeguye kwirinda ubuzima bwawe?",
+    "subtitle": "Jiye mu bagenzi batandukanyije bo mu Rwanda bakoresha AsthmaShield gukurikirana ubuziranenge bw'umwuka no kwirinda ibibazo by'ubuhumekero.",
+    "getStarted": "Tangira none",
+    "learnMore": "Menya byinshi"
+  },
+  "footer": {
+    "brand": "🛡️ ASTHMA SHIELD",
+    "tagline": "Kurinda ibigongo bya Rwanda bikoresheje ubwenge bw'ibikurikirana ibidukikije.",
+    "quickLinks": "Amashusho y'Urubuga",
+    "home": "Ahabanza",
+    "about": "Ibyerekeye",
+    "services": "Serivisi",
+    "contact": "Twandikire",
+    "legal": "Amategeko",
+    "privacy": "Politique y'ibanga",
+    "terms": "Amategeko y'Use",
+    "copyright": "© 2024 Asthma Shield Rwanda. Buri buryo buhirwa.",
+    "developedBy": "Ikoranwa na ❤️ kugira Rwanda"
+  },
+  "login": {
+    "title": "Injira",
+    "patient": "Umurwayi",
+    "admin": "Ubuyobozi",
+    "email": "Email",
+    "password": "Ijambo ry'Ibanga",
+    "loginAs": "Injira nka {{role}}",
+    "cancel": "Hagarika",
+    "welcomeBack": "Murakaza Neza",
+    "subtitle": "Injira kugira ngo ukomeze kurinda ubuzima bwawe",
+    "emailLabel": "ADERESI YA EMAIL",
+    "emailPlaceholder": "email@yawe.com",
+    "passwordPlaceholder": "Injira ijambo ribanza",
+    "signIn": "INJIRA",
+    "noAccount": "Nta konti ufite?",
+    "joinNow": "Fungura",
+    "errorFillAll": "Muzuze ibireba byose",
+    "errorInvalid": "Amakuru atari meza"
+  },
+  "register": {
+    "joinShield": "Jyira mu Gihe",
+    "subtitle": "Fungura konti yawe kugira ngo utangire kurinda ubuzima bwawe",
+    "nameLabel": "AMAZINA YUZUYE",
+    "namePlaceholder": "Jean Doe",
+    "emailLabel": "ADERESI YA EMAIL",
+    "emailPlaceholder": "email@yawe.com",
+    "passwordLabel": "IJAMBO RY'IBANGA",
+    "passwordPlaceholder": "Ibinji mirija 6",
+    "createAccount": "FUNGURA KONTI",
+    "alreadyAccount": "Ufite konti?",
+    "signIn": "Injira",
+    "errorFillAll": "Muzuze ibireba byose",
+    "errorPassword": "Ijambo ribanza rigomba kuba rigizwe nibura ibimenyetso 6",
+    "errorEmailExists": "Email yarakoreshejwe",
+    "success": "Kwiyandikisha byagenze neza!"
+  },
+  "landing": {
+    "liveMonitoring": "IGIKORO CY'IBIKURIKIRANA IBIMENYAMO",
+    "title": "Ibibogo Byanyu Bikurikirwa,",
+    "titleGradient": "Mugire Rwanda.",
+    "subtitle": "Asthma Shield ikoresha ubwenge bw'ubukorano n'ibitekerezo by'ibanze kugira ngo ikurengeze ibipimo by'impumuro mbi mu Rwanda.",
+    "joinShield": "UJYIRE MUGIHE",
+    "signIn": "INJIRA",
+    "kigaliSector": "IGICE KIGALI",
+    "clearAir": "Ikigero Cy'Umwuka Mwiza",
+    "temperature": "IGITURE",
+    "aqiIndex": "IKIGERO CY'UMWUKA",
+    "aiMedicalGuard": "MUBAVO W'ABARWAYI",
+    "onlineConsultations": "Ibiganiro kuri Video",
+    "featuresTitle": "Ikigoro Gikurikirana",
+    "featuresSubtitle": "Ikoranwa hashingiwe kugira ngo ribe rwifashishije amakuru y'ibikiyage n'ubwenge bw'ubukorano bw'isi.",
+    "climateTracking": "Igikoni Gitwikuře",
+    "climateTrackingDesc": "Ibicuruzwa byo mu kirere, ubukana, n'ibitekerezo by'umwuka ukomoka mu miterere yose y'u Rwanda.",
+    "aiDoctor": "Umudamu W'Ubwenge",
+    "aiDoctorDesc": "Ibiganiro kuri video n'ijwi mu masaha 24/7 n'umudamu wisanzuye wize mu bikenye bw'ubuzima.",
+    "riskAlerts": "Ibibwire",
+    "riskAlertsDesc": "Ubutumwa bugendanwa igihe ikigero cy'umwuka mubi cyangwa ibyaryo mu karere kanyu kigera hejuru.",
+    "footerBrand": "🛡️ ASTHMA SHIELD",
+    "footerText": "© 2024 Asthma Shield Rwanda"
+  },
+  "map": {
+    "title": "Ikarita y'Ubuziranenge bw'Umwuka mu Rwanda",
+    "subtitle": "Reba ubuziranenge bw'umwuka n'ibipimo bya pollen mu karere kose mu gihe nyacyo",
+    "selectDistrict": "Hitamo akarere kugira ngo ubone ibisobanuro",
+    "loading": "Ikusanya amakuru y'ikarita...",
+    "noData": "Nta makuru ahari kuri aka karere",
+    "airQuality": "Ubuziranenge bw'Umwuka",
+    "pollenLevel": "Igipimo cya Pollen",
+    "humidity": "Ubukana",
+    "wind": "Umuvumbiko w'umuyaga",
+    "good": "Mwiza",
+    "moderate": "Mengaho",
+    "unhealthy": "Mbi",
+    "veryUnhealthy": "Mbi cyane",
+    "hazardous": "Ibyize"
+  }
+}

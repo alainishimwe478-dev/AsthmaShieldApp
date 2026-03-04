@@ -1,0 +1,161 @@
+{
+  "common": {
+    "appName": "Asthma Shield"
+  },
+  "language": {
+    "select": "Langue",
+    "english": "English",
+    "french": "Français",
+    "kinyarwanda": "Kinyarwanda"
+  },
+  "navbar": {
+    "lightMode": "☀️ Clair",
+    "darkMode": "🌙 Sombre",
+    "login": "Connexion",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "subtitle": "Surveillez la qualité de l'air, détectez les zones à forte concentration de pollen et recevez des alertes sanitaires en temps réel grâce aux données environnementales et à l'IA.",
+    "startMonitoring": "Commencer la surveillance",
+    "signIn": "Se connecter"
+  },
+  "environment": {
+    "currentStatus": "État actuel du district – {{district}}",
+    "aqi": "Indice AQI",
+    "pollen": "Indice de pollen",
+    "temperature": "Température",
+    "riskLevel": "Niveau de risque",
+    "avoidActivity": "Évitez les activités en extérieur"
+  },
+  "stats": {
+    "districtsCovered": "Districts couverts",
+    "activeUsers": "Utilisateurs actifs",
+    "monitoring": "Surveillance"
+  },
+  "prevention": {
+    "title": "Conseils de prévention de l'asthme",
+    "subtitle": "Étapes importantes pour vous protéger et gérer efficacement les crises."
+  },
+  "tip": {
+    "breathe": {
+      "title": "Restez calme et respirez lentement",
+      "description": "Asseyez-vous droit, respirez profondément et essayez de rester calme pendant une crise."
+    },
+    "inhaler": {
+      "title": "Utilisez votre inhalateur",
+      "description": "Suivez votre routine d'inhalateur prescrite. Prenez les médicaments de secours selon les instructions."
+    },
+    "avoid": {
+      "title": "Évitez les déclencheurs",
+      "description": "Éloignez-vous de la fumée, de la poussière, du pollen ou des odeurs fortes qui peuvent aggraver les symptômes."
+    },
+    "seekHelp": {
+      "title": "Cherchez de l'aide si nécessaire",
+      "description": "Appelez votre médecin ou les services d'urgence si les symptômes persistent ou s'aggravent."
+    }
+  },
+  "feature": {
+    "monitoring": "Surveillance en temps réel - Suivez vos schémas respiratoires et symptômes",
+    "aiRisk": "Évaluation des risques par IA - Obtenez des prédictions personnalisées",
+    "alerts": "Alertes environnementales - Restez informé sur la qualité de l'air dans votre région"
+  },
+  "newsletter": {
+    "subscribed": "Abonné {{email}} aux mises à jour d'AsthmaShield !"
+  },
+  "cta": {
+    "title": "Prêt à protéger votre santé ?",
+    "subtitle": "Rejoignez des milliers de Rwandais qui utilisent déjà AsthmaShield pour surveiller la qualité de l'air et prévenir les crises d'asthme.",
+    "getStarted": "Commencer maintenant",
+    "learnMore": "En savoir plus"
+  },
+  "footer": {
+    "brand": "🛡️ ASTHMA SHIELD",
+    "tagline": "Protection des poumons Rwandais grâce à la surveillance environnementale alimentée par l'IA.",
+    "quickLinks": "Liens rapides",
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "contact": "Contact",
+    "legal": "Légal",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "copyright": "© 2024 Asthma Shield Rwanda. Tous droits réservés.",
+    "developedBy": "Développé avec ❤️ pour le Rwanda"
+  },
+  "login": {
+    "title": "Connexion",
+    "patient": "Patient",
+    "admin": "Administrateur",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "loginAs": "Connectez-vous en tant que {{role}}",
+    "cancel": "Annuler",
+    "welcomeBack": "Bon Retour",
+    "subtitle": "Connectez-vous pour continuer à protéger votre santé",
+    "emailLabel": "ADRESSE EMAIL",
+    "emailPlaceholder": "votre.email@exemple.com",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "signIn": "SE CONNECTER",
+    "noAccount": "Vous n'avez pas de compte?",
+    "joinNow": "Rejoindre Maintenant",
+    "errorFillAll": "Veuillez remplir tous les champs",
+    "errorInvalid": "Identifiants invalides"
+  },
+  "register": {
+    "joinShield": "Rejoindre le Bouclier",
+    "subtitle": "Créez votre compte pour commencer à protéger votre santé",
+    "nameLabel": "NOM COMPLET",
+    "namePlaceholder": "Jean Dupont",
+    "emailLabel": "ADRESSE EMAIL",
+    "emailPlaceholder": "votre.email@exemple.com",
+    "passwordLabel": "MOT DE PASSE",
+    "passwordPlaceholder": "Minimum 6 caractères",
+    "createAccount": "CRÉER UN COMPTE",
+    "alreadyAccount": "Vous avez déjà un compte?",
+    "signIn": "Se Connecter",
+    "errorFillAll": "Veuillez remplir tous les champs",
+    "errorPassword": "Le mot de passe doit contenir au moins 6 caractères",
+    "errorEmailExists": "Email déjà enregistré",
+    "success": "Inscription réussie!"
+  },
+  "landing": {
+    "liveMonitoring": "SURVEILLANCE ENVIRONNEMENTALE EN DIRECT",
+    "title": "Protégez Vos Poumons,",
+    "titleGradient": "Respirez au Rwanda.",
+    "subtitle": "Asthma Shield utilise l'IA avancée et les données climatiques en temps réel pour vous protéger des risques respiratoires au Rwanda.",
+    "joinShield": "REJOINDRE LE BOUCLIER",
+    "signIn": "SE CONNECTER",
+    "kigaliSector": "SECTEUR KIGALI",
+    "clearAir": "Qualité de l'air claire",
+    "temperature": "TEMPÉRATURE",
+    "aqiIndex": "INDICE QA",
+    "aiMedicalGuard": "GARDE MÉDICAL IA",
+    "onlineConsultations": "Consultations en ligne",
+    "featuresTitle": "Protection de Précision",
+    "featuresSubtitle": "Conçu spécifiquement pour le paysage Rwandais, combinant les données climatiques locales avec l'excellence de l'IA mondiale.",
+    "climateTracking": "Suivi Climatique",
+    "climateTrackingDesc": "Température en direct, humidité et mises à jour de l'QA来自 toutes les provinces du Rwanda.",
+    "aiDoctor": "Médecin IA",
+    "aiDoctorDesc": "Consultations vidéo et vocales 24/7 avec un médecin IA formé sur les protocoles de santé respiratoire.",
+    "riskAlerts": "Alertes de Risque",
+    "riskAlertsDesc": "Notifications intelligentes lorsque la qualité de l'air ou les niveaux de pollen dans votre district atteignent des niveaux risqués.",
+    "footerBrand": "🛡️ ASTHMA SHIELD",
+    "footerText": "© 2024 Asthma Shield Rwanda"
+  },
+  "map": {
+    "title": "Carte de la Qualité de l'Air au Rwanda",
+    "subtitle": "Visualisez la qualité de l'air et les niveaux de pollen en temps réel dans tous les districts",
+    "selectDistrict": "Sélectionnez un district pour voir les détails",
+    "loading": "Chargement des données de la carte...",
+    "noData": "Aucune donnée disponible pour ce district",
+    "airQuality": "Qualité de l'air",
+    "pollenLevel": "Niveau de pollen",
+    "humidity": "Humidité",
+    "wind": "Vitesse du vent",
+    "good": "Bon",
+    "moderate": "Modéré",
+    "unhealthy": "Malsain",
+    "veryUnhealthy": "Très malsain",
+    "hazardous": "Dangereux"
+  }
+}

@@ -12,14 +12,32 @@ interface SymptomLog {
   triggers: string[];
 }
 
-export default function DashboardScreen() {
+interface DashboardScreenProps {
+  onLogout?: () => void;
+}
+
+export default function DashboardScreen({ onLogout }: DashboardScreenProps) {
   const [logs, setLogs] = useState<SymptomLog[]>([]);
   const [insights, setInsights] = useState<AIInsight | null>(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
+  const [userName, setUserName] = useState('User');
 
   useEffect(() => {
     loadLogs();
+    loadUserData();
   }, []);
+
+  const loadUserData = async () => {
+    try {
+      const userData = await AsyncStorage.getItem('currentUser');
+      if (userData) {
+        const user = JSON.parse(userData);
+        setUserName(user.name || 'User');
+      }
+    } catch (error) {
+      console.error('Failed to load user data:', error);
+    }
+  };
 
   // Safe AsyncStorage load
   const loadLogs = async () => {
@@ -51,6 +69,18 @@ export default function DashboardScreen() {
     }
   };
 
+const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('currentUser');
+      // Call the onLogout callback if provided, otherwise use navigation
+      if (onLogout) {
+        onLogout();
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   const formatDate = (timestamp: number) => {
     try {
       return new Date(timestamp).toLocaleDateString('en-US', {
@@ -73,8 +103,12 @@ export default function DashboardScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Text style={styles.title}>🛡️ Dashboard</Text>
-        <Text style={styles.subtitle}>Your asthma overview</Text>
+        <View style={styles.headerTop}>
+          <View>
+            <Text style={styles.title}>🛡️ Dashboard</Text>
+            <Text style={styles.subtitle}>Welcome, {userName}</Text>
+          </View>
+        </View>
       </View>
 
       <View style={styles.statsGrid}>
@@ -130,6 +164,13 @@ export default function DashboardScreen() {
           ))}
         </View>
       )}
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>LOGOUT</Text>
+      </TouchableOpacity>
+
+      <View style={styles.bottomSpacer} />
     </ScrollView>
   );
 }
@@ -142,6 +183,11 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 20,
+  },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   title: {
     fontSize: 28,
@@ -262,5 +308,21 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 14,
+  },
+  logoutButton: {
+    backgroundColor: '#EF4444',
+    padding: 18,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  logoutButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 2,
+  },
+  bottomSpacer: {
+    height: 40,
   },
 });

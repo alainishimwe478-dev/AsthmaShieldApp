@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, Outlet } from 'react-router-dom';
 import { AppStatus, EnvironmentalData, User } from './types';
 import { getEnvironmentalData } from './services/geminiService';
 import EnvironmentalDashboard from './components/EnvironmentalDashboard';
-// DoctorLive removed - unused import
 import Auth from './components/Auth';
 import LandingPage from './components/LandingPageNew';
 import DoctorLayout from './components/doctor/DoctorLayout';
@@ -21,18 +20,45 @@ import PatientLogsPage from './components/patient/PatientLogsPage';
 import PatientAppointmentsPage from './components/patient/PatientAppointmentsPage';
 import PatientProfilePage from './components/patient/PatientProfilePage';
 import PatientSettingsPage from './components/patient/PatientSettingsPage';
+import AdminDashboard from './components/AdminDashboard';
+import { AdminSidebar, ManageDoctorsPage, ManagePatientsPage, SystemAnalyticsPage, DistrictMonitoringPage, ReportsPage as AdminReportsPage, GlobalAlertsPage } from './components/admin';
+
+// Admin Layout Component - Single sidebar for all admin pages
+function AdminLayout() {
+  const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.documentElement.classList.toggle("dark");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('rwanda_guard_user');
+    navigate('/');
+  };
+
+  return (
+    <div className={`0a6e3sds flex h-screen ${darkMode ? "bg-gray-900" : "bg-slate-50"} transition`}>
+      <AdminSidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} onLogout={handleLogout} />
+      <main className={`0oboy5v0 flex-1 p-10 overflow-y-auto ${darkMode ? "text-white" : "text-slate-800"}`}>
+        <Outlet />
+      </main>
+    </div>
+  );
+}
 
 // Inner component that has access to useNavigate hook
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState<AppStatus>(AppStatus.IDLE);
   const [data, setData] = useState<EnvironmentalData | null>(null);
-const [_isConsulting, setIsConsulting] = useState(false);
+  const [_isConsulting, setIsConsulting] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [initialized, setInitialized] = useState(false);
   
   // 'home' is the mandatory default view to ensure LandingPage is shown first.
-  const [view, setView] = useState<'home' | 'dashboard' | 'auth' | 'doctor'>('home');
+  const [view, setView] = useState<'home' | 'dashboard' | 'auth' | 'doctor' | 'admin'>('home');
 
   // Initialize demo users on mount
   useEffect(() => {
@@ -89,6 +115,29 @@ const [_isConsulting, setIsConsulting] = useState(false);
     }
     
     localStorage.setItem('rwanda_guard_doctors', JSON.stringify(doctors));
+
+    // Create demo admin in admins storage
+    const adminsData = localStorage.getItem('rwanda_guard_admins');
+    const admins = adminsData ? JSON.parse(adminsData) : [];
+    
+    const adminEmail = 'admin@asthma-shield.rw';
+    let adminUser = admins.find((u: any) => u.email === adminEmail);
+    
+    if (!adminUser) {
+      adminUser = {
+        id: 'admin-001',
+        email: adminEmail,
+        password: 'admin123',
+        fullName: 'System Admin',
+        phone: '+250 789 000 000',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
+        createdAt: Date.now(),
+        isAdmin: true,
+        role: 'admin'
+      };
+      admins.push(adminUser);
+      localStorage.setItem('rwanda_guard_admins', JSON.stringify(admins));
+    }
     
     // Load user session
     const savedUser = localStorage.getItem('rwanda_guard_user');
@@ -132,11 +181,14 @@ const [_isConsulting, setIsConsulting] = useState(false);
 
   const handleGoToAuth = () => {
     if (user) {
-      const targetView = user.isDoctor ? 'doctor' : 'dashboard';
+      let targetView: 'dashboard' | 'doctor' | 'admin' = 'dashboard';
+      if (user.isDoctor) targetView = 'doctor';
+      else if (user.isAdmin) targetView = 'admin';
       setView(targetView);
-      // Navigate to the correct URL for doctor
       if (user.isDoctor) {
         navigate('/doctor/overview');
+      } else if (user.isAdmin) {
+        navigate('/admin');
       }
     } else {
       setView('auth');
@@ -155,16 +207,21 @@ const [_isConsulting, setIsConsulting] = useState(false);
   if (view === 'auth' && !user) {
     return <Auth onAuthComplete={(u: User) => { 
       setUser(u); 
-      const targetView = u.isDoctor ? 'doctor' : 'dashboard';
+      let targetView: 'dashboard' | 'doctor' | 'admin' = 'dashboard';
+      if (u.isDoctor) targetView = 'doctor';
+      else if (u.isAdmin) targetView = 'admin';
       setView(targetView);
-      // Navigate to doctor dashboard URL after doctor login
       if (u.isDoctor) {
         navigate('/doctor/overview');
+      } else if (u.isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/patient-dashboard');
       }
     }} />;
   }
 
-// Home View - Landing Page
+  // Home View - Landing Page
   if (view === 'home') {
     return (
       <LandingPage 
@@ -178,6 +235,33 @@ const [_isConsulting, setIsConsulting] = useState(false);
   if (!user) {
     setView('home');
     return null;
+  }
+
+  // Protected Route: Admin Dashboard
+  if (view === 'admin' && !user.isAdmin) {
+    return (
+      <div className="0xgvx1ar min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="0i9iwpld text-center p-8 bg-white rounded-3xl shadow-lg max-w-md">
+          <div className="0hfgh8nh w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="08rxxvvi w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h2 className="0k7pmwzx text-2xl font-black text-slate-800 mb-2">Access Denied</h2>
+          <p className="0wzln0dk text-slate-500 mb-6">You do not have permission to access the Admin Dashboard. Please login as an admin.</p>
+          <button 
+            onClick={() => {
+              localStorage.removeItem('rwanda_guard_user');
+              setUser(null);
+              setView('auth');
+            }} 
+            className="0688ftvi px-6 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 transition"
+          >
+            Login as Admin
+          </button>
+        </div>
+      </div>
+    );
   }
 
   // Protected Route: Doctor Dashboard
@@ -221,13 +305,15 @@ const [_isConsulting, setIsConsulting] = useState(false);
           setUser(u);
           if (u.isDoctor) {
             navigate('/doctor/overview');
+          } else if (u.isAdmin) {
+            navigate('/admin');
           } else {
             navigate('/patient-dashboard');
           }
         }} />
       } />
       <Route path="/dashboard" element={
-        user && !user.isDoctor ? (
+        user && !user.isDoctor && !user.isAdmin ? (
           <PatientDashboard>
             <EnvironmentalDashboard
               data={data}
@@ -238,6 +324,21 @@ const [_isConsulting, setIsConsulting] = useState(false);
           </PatientDashboard>
         ) : <Navigate to="/auth" replace />
       } />
+      <Route path="/admin" element={
+        user && user.isAdmin ? (
+          <AdminLayout />
+        ) : <Navigate to="/auth" replace />
+      }>
+        <Route index element={<Navigate to="/admin/overview" replace />} />
+        <Route path="overview" element={<AdminDashboard onLogout={handleLogout} />} />
+        <Route path="doctors" element={<ManageDoctorsPage />} />
+        <Route path="patients" element={<ManagePatientsPage />} />
+        <Route path="analytics" element={<SystemAnalyticsPage />} />
+        <Route path="districts" element={<DistrictMonitoringPage />} />
+        <Route path="reports" element={<AdminReportsPage />} />
+        <Route path="alerts" element={<GlobalAlertsPage />} />
+        <Route path="*" element={<Navigate to="/admin/overview" replace />} />
+      </Route>
       <Route path="/doctor/*" element={
         user && user.isDoctor ? (
           <Routes>
@@ -255,7 +356,7 @@ const [_isConsulting, setIsConsulting] = useState(false);
         ) : <Navigate to="/auth" replace />
       } />
       <Route path="/patient-dashboard" element={
-        user && !user.isDoctor ? (
+        user && !user.isDoctor && !user.isAdmin ? (
           <PatientDashboard />
         ) : <Navigate to="/auth" replace />
       } >
@@ -283,3 +384,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

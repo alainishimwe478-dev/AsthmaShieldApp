@@ -5,7 +5,6 @@ import {
   Activity,
   User,
   Settings,
-  LogOut,
   Moon,
   Sun,
   ChevronRight,
@@ -18,9 +17,8 @@ import {
   Wind,
   AlertTriangle,
   Thermometer,
+  LogOut,
 } from "lucide-react";
-import { MapContainer, TileLayer, Circle, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 
 import PatientDashboardHome from "./patient/PatientDashboardHome";
 import PatientHealthPage from "./patient/PatientHealthPage";
@@ -76,15 +74,6 @@ export default function PatientDashboard({ children }: PatientDashboardProps) {
   const [coldest, setColdest] = useState<{ date: string; temperature: number } | null>(null);
   const [tempRisk, setTempRisk] = useState<{ level: string; message: string; color: string }>({ level: 'Normal', message: 'Comfortable temperature.', color: 'green' });
 
-  const districts = [
-    { name: "Gasabo", lat: -1.9441, lng: 30.0619, risk: "High", wealth: "Medium" },
-    { name: "Kicukiro", lat: -1.9706, lng: 30.1044, risk: "Medium", wealth: "High" },
-    { name: "Nyarugenge", lat: -1.9499, lng: 30.0588, risk: "High", wealth: "Low" },
-  ];
-
-  const getRiskColor = (risk: string) => (risk === "High" ? "red" : risk === "Medium" ? "orange" : "green");
-  const getWealthColor = (wealth: string) => (wealth === "High" ? "blue" : wealth === "Medium" ? "yellow" : "gray");
-
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     document.documentElement.classList.toggle("dark");
@@ -92,7 +81,7 @@ export default function PatientDashboard({ children }: PatientDashboardProps) {
 
   const handleLogout = () => {
     localStorage.removeItem("rwanda_guard_user");
-    navigate("/");
+    navigate("/login");
   };
 
   const baseClass = "flex items-center gap-3 p-3 rounded-xl transition-all duration-200";
@@ -200,8 +189,12 @@ export default function PatientDashboard({ children }: PatientDashboardProps) {
             <div className="0nuls957 flex items-center gap-3 font-bold">{darkMode ? <Sun size={18}/> : <Moon size={18}/>} {darkMode ? "Light Mode" : "Dark Mode"}</div>
             <ChevronRight size={16}/>
           </button>
-          <button onClick={handleLogout} className="0s868fst flex items-center gap-3 p-3 text-red-500 hover:bg-red-50 rounded-xl w-full">
-            <LogOut size={18}/> Logout
+
+          <button 
+            onClick={handleLogout} 
+            className="0a1cwf2m w-full flex items-center gap-3 p-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors"
+          >
+            <LogOut size={18} /> Logout
           </button>
         </div>
       </aside>
@@ -283,29 +276,6 @@ export default function PatientDashboard({ children }: PatientDashboardProps) {
               }`}>{tempRisk.level}</p>
             </div>
           </div>
-        </div>
-
-        {/* Map */}
-        <div className="09aqx7r0 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
-          <h2 className="0ir2q8xp text-lg font-semibold mb-4">District Risk & Wealth Map</h2>
-          <MapContainer center={[-1.9441, 30.0619]} zoom={12} style={{ height: "400px", width: "100%" }}>
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
-            {districts.map((d, i) => (
-              <Circle
-                key={i}
-                center={[d.lat, d.lng]}
-                radius={2000}
-                pathOptions={{ color: getRiskColor(d.risk), fillColor: getWealthColor(d.wealth), fillOpacity: 0.3 }}
-              >
-                <Popup>
-                  <strong>{d.name}</strong><br/>
-                  Risk: {d.risk}<br/>
-                  Wealth: {d.wealth}<br/>
-                  Prevention: {d.risk === "High" ? "Stay indoors, use mask, carry inhaler" : "Normal precautions"}
-                </Popup>
-              </Circle>
-            ))}
-          </MapContainer>
         </div>
 
         {/* Nested Routes - Using Outlet for proper nested routing */}

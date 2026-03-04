@@ -174,7 +174,7 @@ export default function LandingScreen({ onGetStarted, onLogin }) {
 
           <div className="0ww4kw6s hidden lg:block">
             <h2 className="05dcmzbx text-5xl font-extrabold text-slate-800 dark:text-white leading-tight mb-6">
-              Smart Asthma Monitoring
+              Asthma Shield Monitoring
               <br />& District Risk Alerts
             </h2>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 interface RegisterScreenProps {
   onRegisterSuccess: () => void;
@@ -8,18 +9,23 @@ interface RegisterScreenProps {
 }
 
 export default function RegisterScreen({ onRegisterSuccess, onNavigateToLogin }: RegisterScreenProps) {
+  const { t, i18n } = useTranslation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
+
   const handleRegister = async () => {
     if (!name || !email || !password) {
-      Alert.alert('Error', 'Please fill all fields');
+      Alert.alert('Error', t('register.errorFillAll'));
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
+      Alert.alert('Error', t('register.errorPassword'));
       return;
     }
 
@@ -28,13 +34,13 @@ export default function RegisterScreen({ onRegisterSuccess, onNavigateToLogin }:
       const users = usersData ? JSON.parse(usersData) : [];
 
       if (users.find((u: any) => u.email === email)) {
-        Alert.alert('Error', 'Email already registered');
+        Alert.alert('Error', t('register.errorEmailExists'));
         return;
       }
 
       users.push({ name, email, password });
       await AsyncStorage.setItem('users', JSON.stringify(users));
-      Alert.alert('Success', 'Registration successful!');
+      Alert.alert('Success', t('register.success'));
       onRegisterSuccess();
     } catch (error) {
       Alert.alert('Error', 'Registration failed');
@@ -43,20 +49,42 @@ export default function RegisterScreen({ onRegisterSuccess, onNavigateToLogin }:
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Language Switcher */}
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginBottom: 20 }}>
+        <TouchableOpacity 
+          style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: i18n.language === 'en' ? '#2563EB' : '#E2E8F0' }} 
+          onPress={() => changeLanguage('en')}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '700', color: i18n.language === 'en' ? 'white' : '#64748B' }}>EN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: i18n.language === 'fr' ? '#2563EB' : '#E2E8F0' }} 
+          onPress={() => changeLanguage('fr')}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '700', color: i18n.language === 'fr' ? 'white' : '#64748B' }}>FR</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: i18n.language === 'rw' ? '#2563EB' : '#E2E8F0' }} 
+          onPress={() => changeLanguage('rw')}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '700', color: i18n.language === 'rw' ? 'white' : '#64748B' }}>RW</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.header}>
         <View style={styles.iconContainer}>
           <Text style={styles.icon}>🛡️</Text>
         </View>
-        <Text style={styles.title}>Join the Shield</Text>
-        <Text style={styles.subtitle}>Create your account to start protecting your health</Text>
+        <Text style={styles.title}>{t('register.joinShield')}</Text>
+        <Text style={styles.subtitle}>{t('register.subtitle')}</Text>
       </View>
 
       <View style={styles.form}>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>FULL NAME</Text>
+          <Text style={styles.label}>{t('register.nameLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="John Doe"
+            placeholder={t('register.namePlaceholder')}
             placeholderTextColor="#94A3B8"
             value={name}
             onChangeText={setName}
@@ -64,10 +92,10 @@ export default function RegisterScreen({ onRegisterSuccess, onNavigateToLogin }:
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>EMAIL ADDRESS</Text>
+          <Text style={styles.label}>{t('register.emailLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="your.email@example.com"
+            placeholder={t('register.emailPlaceholder')}
             placeholderTextColor="#94A3B8"
             value={email}
             onChangeText={setEmail}
@@ -77,10 +105,10 @@ export default function RegisterScreen({ onRegisterSuccess, onNavigateToLogin }:
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>PASSWORD</Text>
+          <Text style={styles.label}>{t('register.passwordLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Minimum 6 characters"
+            placeholder={t('register.passwordPlaceholder')}
             placeholderTextColor="#94A3B8"
             value={password}
             onChangeText={setPassword}
@@ -89,13 +117,13 @@ export default function RegisterScreen({ onRegisterSuccess, onNavigateToLogin }:
         </View>
 
         <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>CREATE ACCOUNT</Text>
+          <Text style={styles.buttonText}>{t('register.createAccount')}</Text>
         </TouchableOpacity>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Already have an account? </Text>
+          <Text style={styles.footerText}>{t('register.alreadyAccount')} </Text>
           <TouchableOpacity onPress={onNavigateToLogin}>
-            <Text style={styles.link}>Sign In</Text>
+            <Text style={styles.link}>{t('register.signIn')}</Text>
           </TouchableOpacity>
         </View>
       </View>

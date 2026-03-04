@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onGetStarted: () => void;
@@ -7,30 +8,58 @@ interface Props {
 }
 
 export default function LandingScreen({ onGetStarted, onLogin }: Props) {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Language Switcher */}
+      <View style={styles.languageSwitcher}>
+        <TouchableOpacity 
+          style={[styles.langButton, i18n.language === 'en' && styles.langButtonActive]} 
+          onPress={() => changeLanguage('en')}
+        >
+          <Text style={[styles.langText, i18n.language === 'en' && styles.langTextActive]}>EN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.langButton, i18n.language === 'fr' && styles.langButtonActive]} 
+          onPress={() => changeLanguage('fr')}
+        >
+          <Text style={[styles.langText, i18n.language === 'fr' && styles.langTextActive]}>FR</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.langButton, i18n.language === 'rw' && styles.langButtonActive]} 
+          onPress={() => changeLanguage('rw')}
+        >
+          <Text style={[styles.langText, i18n.language === 'rw' && styles.langTextActive]}>RW</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Hero Section */}
       <View style={styles.hero}>
         <View style={styles.badge}>
           <View style={styles.dot} />
-          <Text style={styles.badgeText}>LIVE ENVIRONMENTAL MONITORING</Text>
+          <Text style={styles.badgeText}>{t('landing.liveMonitoring')}</Text>
         </View>
         
         <Text style={styles.title}>
-          Protect Your Lungs,{'\n'}
-          <Text style={styles.titleGradient}>Breathe Rwanda.</Text>
+          {t('landing.title')}{'\n'}
+          <Text style={styles.titleGradient}>{t('landing.titleGradient')}</Text>
         </Text>
         
         <Text style={styles.subtitle}>
-          Asthma Shield uses advanced AI and real-time climate data to protect you from respiratory risks across Rwanda.
+          {t('landing.subtitle')}
         </Text>
         
         <View style={styles.buttonGroup}>
           <TouchableOpacity style={styles.primaryButton} onPress={onGetStarted}>
-            <Text style={styles.primaryButtonText}>JOIN THE SHIELD</Text>
+            <Text style={styles.primaryButtonText}>{t('landing.joinShield')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.secondaryButton} onPress={onLogin}>
-            <Text style={styles.secondaryButtonText}>SIGN IN</Text>
+            <Text style={styles.secondaryButtonText}>{t('landing.signIn')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -38,8 +67,8 @@ export default function LandingScreen({ onGetStarted, onLogin }: Props) {
         <View style={styles.featureCard}>
           <View style={styles.cardHeader}>
             <View>
-              <Text style={styles.cardLabel}>KIGALI SECTOR</Text>
-              <Text style={styles.cardTitle}>Clear Air Quality</Text>
+              <Text style={styles.cardLabel}>{t('landing.kigaliSector')}</Text>
+              <Text style={styles.cardTitle}>{t('landing.clearAir')}</Text>
             </View>
             <View style={styles.checkIcon}>
               <Text style={styles.checkText}>✓</Text>
@@ -48,19 +77,19 @@ export default function LandingScreen({ onGetStarted, onLogin }: Props) {
           
           <View style={styles.statsRow}>
             <View style={styles.statBox}>
-              <Text style={styles.statLabel}>TEMPERATURE</Text>
+              <Text style={styles.statLabel}>{t('landing.temperature')}</Text>
               <Text style={styles.statValue}>24°C</Text>
             </View>
             <View style={styles.statBox}>
-              <Text style={styles.statLabel}>AQI INDEX</Text>
+              <Text style={styles.statLabel}>{t('landing.aqiIndex')}</Text>
               <Text style={[styles.statValue, { color: '#10B981' }]}>12</Text>
             </View>
           </View>
           
           <View style={styles.aiCard}>
             <View>
-              <Text style={styles.aiLabel}>AI MEDICAL GUARD</Text>
-              <Text style={styles.aiTitle}>Online Consultations</Text>
+              <Text style={styles.aiLabel}>{t('landing.aiMedicalGuard')}</Text>
+              <Text style={styles.aiTitle}>{t('landing.onlineConsultations')}</Text>
             </View>
             <View style={styles.videoIcon}>
               <Text style={styles.videoText}>📹</Text>
@@ -71,18 +100,18 @@ export default function LandingScreen({ onGetStarted, onLogin }: Props) {
 
       {/* Features Section */}
       <View style={styles.features}>
-        <Text style={styles.featuresTitle}>Precision Protection</Text>
+        <Text style={styles.featuresTitle}>{t('landing.featuresTitle')}</Text>
         <Text style={styles.featuresSubtitle}>
-          Built specifically for the Rwandan landscape, combining local climate data with global AI excellence.
+          {t('landing.featuresSubtitle')}
         </Text>
         
         <View style={styles.featureItem}>
           <View style={styles.featureIcon}>
             <Text style={styles.iconText}>☀️</Text>
           </View>
-          <Text style={styles.featureTitle}>Climate Tracking</Text>
+          <Text style={styles.featureTitle}>{t('landing.climateTracking')}</Text>
           <Text style={styles.featureDesc}>
-            Live temperature, humidity, and AQI updates from across all provinces in Rwanda.
+            {t('landing.climateTrackingDesc')}
           </Text>
         </View>
 
@@ -90,9 +119,9 @@ export default function LandingScreen({ onGetStarted, onLogin }: Props) {
           <View style={[styles.featureIcon, { backgroundColor: '#D1FAE5' }]}>
             <Text style={styles.iconText}>👨‍⚕️</Text>
           </View>
-          <Text style={styles.featureTitle}>AI Medical Doctor</Text>
+          <Text style={styles.featureTitle}>{t('landing.aiDoctor')}</Text>
           <Text style={styles.featureDesc}>
-            24/7 video and voice consultations with an AI doctor trained on respiratory health protocols.
+            {t('landing.aiDoctorDesc')}
           </Text>
         </View>
 
@@ -100,17 +129,17 @@ export default function LandingScreen({ onGetStarted, onLogin }: Props) {
           <View style={[styles.featureIcon, { backgroundColor: '#FEE2E2' }]}>
             <Text style={styles.iconText}>🔔</Text>
           </View>
-          <Text style={styles.featureTitle}>Risk Alerts</Text>
+          <Text style={styles.featureTitle}>{t('landing.riskAlerts')}</Text>
           <Text style={styles.featureDesc}>
-            Intelligent notifications when air quality or pollen levels in your district reach risky levels.
+            {t('landing.riskAlertsDesc')}
           </Text>
         </View>
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
-        <Text style={styles.footerBrand}>🛡️ ASTHMA SHIELD</Text>
-        <Text style={styles.footerText}>© 2024 Asthma Shield Rwanda</Text>
+        <Text style={styles.footerBrand}>{t('landing.footerBrand')}</Text>
+        <Text style={styles.footerText}>{t('landing.footerText')}</Text>
       </View>
     </ScrollView>
   );
@@ -121,9 +150,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8FAFC',
   },
+  languageSwitcher: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    gap: 8,
+  },
+  langButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: '#E2E8F0',
+  },
+  langButtonActive: {
+    backgroundColor: '#2563EB',
+  },
+  langText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  langTextActive: {
+    color: 'white',
+  },
   hero: {
     padding: 24,
-    paddingTop: 60,
+    paddingTop: 10,
   },
   badge: {
     flexDirection: 'row',

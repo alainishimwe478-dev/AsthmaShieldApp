@@ -5,10 +5,11 @@ import LandingScreen from '../screens/LandingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import DashboardScreen from '../screens/DashboardScreen';
+import AdminDashboard from '../screens/AdminDashboard';
 
 export default function MainNavigator() {
-  const [screen, setScreen] = useState<'loading' | 'landing' | 'login' | 'register' | 'dashboard'>('landing');
-  const [userData, setUserData] = useState<{ email: string; name: string } | null>(null);
+  const [screen, setScreen] = useState<'loading' | 'landing' | 'login' | 'register' | 'dashboard' | 'adminDashboard'>('landing');
+  const [userData, setUserData] = useState<{ email: string; name: string; role: string } | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -19,10 +20,16 @@ export default function MainNavigator() {
       const user = await AsyncStorage.getItem('currentUser');
       
       if (user) {
-        setUserData(JSON.parse(user));
-        setScreen('dashboard');
+        const parsedUser = JSON.parse(user);
+        setUserData(parsedUser);
+        // Route based on role
+        if (parsedUser.role === 'admin') {
+          setScreen('adminDashboard');
+        } else {
+          setScreen('dashboard');
+        }
       } else {
-        // Always show landing page first - remove the hasSeenLanding check
+        // Always show landing page first
         setScreen('landing');
       }
     } catch {
@@ -30,15 +37,20 @@ export default function MainNavigator() {
     }
   };
 
-  const handleLoginSuccess = (user: { email: string; name: string }) => {
+  const handleLoginSuccess = (user: { email: string; name: string; role: string }) => {
     setUserData(user);
-    setScreen('dashboard');
+    // Route based on role
+    if (user.role === 'admin') {
+      setScreen('adminDashboard');
+    } else {
+      setScreen('dashboard');
+    }
   };
 
-  const handleLogout = async () => {
+const handleLogout = async () => {
     await AsyncStorage.removeItem('currentUser');
     setUserData(null);
-    setScreen('login');
+    setScreen('landing');
   };
 
   if (screen === 'loading') {
@@ -70,5 +82,9 @@ export default function MainNavigator() {
     return <RegisterScreen onRegisterSuccess={() => setScreen('login')} onNavigateToLogin={() => setScreen('login')} />;
   }
 
-  return <DashboardScreen />;
+if (screen === 'adminDashboard') {
+    return <AdminDashboard onLogout={handleLogout} />;
+  }
+
+  return <DashboardScreen onLogout={handleLogout} />;
 }

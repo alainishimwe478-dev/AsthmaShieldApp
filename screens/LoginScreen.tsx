@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 interface LoginScreenProps {
-  onLoginSuccess: (userData: { email: string; name: string }) => void;
+  onLoginSuccess: (userData: { email: string; name: string; role: string }) => void;
   onNavigateToRegister: () => void;
 }
 
@@ -50,25 +51,49 @@ const tw = StyleSheet.create({
 });
 
 export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: LoginScreenProps) {
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Mock Admin credentials
+  const admin = { email: 'admin@hospital.rw', password: 'admin123', name: 'Admin' };
+
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
+
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please fill all fields');
+      Alert.alert('Error', t('login.errorFillAll'));
       return;
     }
 
     try {
+      // Check if admin credentials
+      if (email === admin.email && password === admin.password) {
+        await AsyncStorage.setItem('currentUser', JSON.stringify({ 
+          email: admin.email, 
+          name: admin.name, 
+          role: 'admin' 
+        }));
+        onLoginSuccess({ email: admin.email, name: admin.name, role: 'admin' });
+        return;
+      }
+
+      // Check normal users
       const usersData = await AsyncStorage.getItem('users');
       const users = usersData ? JSON.parse(usersData) : [];
       const user = users.find((u: any) => u.email === email && u.password === password);
 
       if (user) {
-        await AsyncStorage.setItem('currentUser', JSON.stringify({ email: user.email, name: user.name }));
-        onLoginSuccess({ email: user.email, name: user.name });
+        await AsyncStorage.setItem('currentUser', JSON.stringify({ 
+          email: user.email, 
+          name: user.name,
+          role: 'user' 
+        }));
+        onLoginSuccess({ email: user.email, name: user.name, role: 'user' });
       } else {
-        Alert.alert('Error', 'Invalid credentials');
+        Alert.alert('Error', t('login.errorInvalid'));
       }
     } catch (error) {
       Alert.alert('Error', 'Login failed');
@@ -77,20 +102,42 @@ export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: Lo
 
   return (
     <ScrollView style={tw.container} contentContainerStyle={tw.content}>
+      {/* Language Switcher */}
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginBottom: 20 }}>
+        <TouchableOpacity 
+          style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: i18n.language === 'en' ? '#2563EB' : '#E2E8F0' }} 
+          onPress={() => changeLanguage('en')}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '700', color: i18n.language === 'en' ? 'white' : '#64748B' }}>EN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: i18n.language === 'fr' ? '#2563EB' : '#E2E8F0' }} 
+          onPress={() => changeLanguage('fr')}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '700', color: i18n.language === 'fr' ? 'white' : '#64748B' }}>FR</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: i18n.language === 'rw' ? '#2563EB' : '#E2E8F0' }} 
+          onPress={() => changeLanguage('rw')}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '700', color: i18n.language === 'rw' ? 'white' : '#64748B' }}>RW</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={tw.header}>
         <View style={tw.iconContainer}>
           <Text style={tw.icon}>🛡️</Text>
         </View>
-        <Text style={tw.title}>Welcome Back</Text>
-        <Text style={tw.subtitle}>Sign in to continue protecting your health</Text>
+        <Text style={tw.title}>{t('login.welcomeBack')}</Text>
+        <Text style={tw.subtitle}>{t('login.subtitle')}</Text>
       </View>
 
       <View style={tw.form}>
         <View style={tw.inputGroup}>
-          <Text style={tw.label}>EMAIL ADDRESS</Text>
+          <Text style={tw.label}>{t('login.emailLabel')}</Text>
           <TextInput
             style={tw.input}
-            placeholder="your.email@example.com"
+            placeholder={t('login.emailPlaceholder')}
             placeholderTextColor="#94A3B8"
             value={email}
             onChangeText={setEmail}
@@ -100,10 +147,10 @@ export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: Lo
         </View>
 
         <View style={tw.inputGroup}>
-          <Text style={tw.label}>PASSWORD</Text>
+          <Text style={tw.label}>{t('login.passwordLabel')}</Text>
           <TextInput
             style={tw.input}
-            placeholder="Enter your password"
+            placeholder={t('login.passwordPlaceholder')}
             placeholderTextColor="#94A3B8"
             value={password}
             onChangeText={setPassword}
@@ -112,13 +159,13 @@ export default function LoginScreen({ onLoginSuccess, onNavigateToRegister }: Lo
         </View>
 
         <TouchableOpacity style={tw.button} onPress={handleLogin}>
-          <Text style={tw.buttonText}>SIGN IN</Text>
+          <Text style={tw.buttonText}>{t('login.signIn')}</Text>
         </TouchableOpacity>
 
         <View style={tw.footer}>
-          <Text style={tw.footerText}>Don't have an account? </Text>
+          <Text style={tw.footerText}>{t('login.noAccount')} </Text>
           <TouchableOpacity onPress={onNavigateToRegister}>
-            <Text style={tw.link}>Join Now</Text>
+            <Text style={tw.link}>{t('login.joinNow')}</Text>
           </TouchableOpacity>
         </View>
       </View>
